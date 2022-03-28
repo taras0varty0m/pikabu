@@ -1,27 +1,47 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserModel } from '../dto/user.model';
 import { PostModel } from 'src/posts/dto/post.model';
-import { UserLoaders } from '../users.loader';
+import { FavoritedPostDataLoader } from 'src/favorited-posts/favorited-posts.loader';
+import { Loader } from 'src/libs/NestDataloader';
+import { FavoritedPostModel } from 'src/favorited-posts/dto/favorited-post.model';
+import { FavoritedCommentModel } from 'src/favorited-comments/dto/favorited-comment.model';
+import { FavoritedCommentDataLoader } from 'src/favorited-comments/favorited-comments.loader';
+import { PostDataLoader } from 'src/posts/posts.loader';
 
 @Resolver(() => UserModel)
 export class UsersFieldsResolver {
-  constructor(private readonly userLoaders: UserLoaders) {}
-
   @ResolveField(() => [PostModel])
-  posts(@Parent() { id, posts }: UserModel) {
+  async posts(
+    @Parent() { id, posts }: UserModel,
+    @Loader(PostDataLoader.name)
+    postDataLoader: ReturnType<PostDataLoader['generateDataLoader']>,
+  ) {
     if (posts) return posts;
-    return this.userLoaders.batchPosts.load(id);
+    return await postDataLoader.load(id);
   }
 
-  @ResolveField(() => [PostModel])
-  favoritedPosts(@Parent() { id, favoritedPosts }: UserModel) {
+  @ResolveField(() => [FavoritedPostModel])
+  async favoritedPosts(
+    @Parent() { id, favoritedPosts }: UserModel,
+    @Loader(FavoritedPostDataLoader.name)
+    favoritedPostDataLoader: ReturnType<
+      FavoritedPostDataLoader['generateDataLoader']
+    >,
+  ) {
     if (favoritedPosts) return favoritedPosts;
-    return this.userLoaders.batchFavoritedPosts.load(id);
+    return await favoritedPostDataLoader.load(id);
   }
 
-  @ResolveField(() => [PostModel])
-  favoritedComments(@Parent() { id, favoritedComments }: UserModel) {
+  @ResolveField(() => [FavoritedCommentModel])
+  async favoritedComments(
+    @Parent() { id, favoritedComments }: UserModel,
+    @Loader(FavoritedCommentDataLoader.name)
+    favoritedCommentDataLoader: ReturnType<
+      FavoritedCommentDataLoader['generateDataLoader']
+    >,
+  ) {
     if (favoritedComments) return favoritedComments;
-    return this.userLoaders.batchFavoritedComments.load(id);
+    const comments = await favoritedCommentDataLoader.load(id);
+    return comments;
   }
 }

@@ -1,46 +1,20 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
-import { CommentsRepository } from 'src/comments/comments.repository';
-import { Comment } from 'src/comments/entities/comment.entity';
-import { LikedPost } from 'src/liked-posts/entities/liked-post.entity';
-import { LikedPostsRepository } from 'src/liked-posts/liked-posts.repository';
+import { PostsRepository } from 'src/posts/posts.repository';
+import { NestDataLoader } from 'src/libs/NestDataloader';
+import { PostModel } from './dto/post.model';
 
-@Injectable({ scope: Scope.REQUEST })
-export class PostLoaders {
-  constructor(
-    private readonly commentRepository: CommentsRepository,
-    private readonly likedPostsRepository: LikedPostsRepository,
-  ) {}
+@Injectable()
+export class PostDataLoader implements NestDataLoader<string, PostModel[]> {
+  constructor(private readonly postsRepository: PostsRepository) {}
 
-  readonly batchComments = new DataLoader(async (ids: string[]) => {
-    const comments = await this.commentRepository.getByPostIds(ids);
+  generateDataLoader(): DataLoader<string, PostModel[], string> {
+    return new DataLoader(async (userIds) => {
+      const posts = await this.postsRepository.getByUserIds(
+        userIds as string[],
+      );
 
-    const postIdToComments: { [key: string]: Comment[] } = {};
-
-    comments.forEach((comment) => {
-      if (!postIdToComments[comment.postId]) {
-        postIdToComments[comment.postId] = [comment];
-      } else {
-        postIdToComments[comment.postId].push(comment);
-      }
+      return userIds.map((id) => posts.filter((post) => post.userId === id));
     });
-
-    return ids.map((id) => postIdToComments[id] || []);
-  });
-
-  readonly batchPostLikes = new DataLoader(async (ids: string[]) => {
-    const likedPosts = await this.likedPostsRepository.getByPostIds(ids);
-
-    const postIdToLikedPost: { [key: string]: LikedPost[] } = {};
-
-    likedPosts.forEach((likedPost) => {
-      if (!postIdToLikedPost[likedPost.postId]) {
-        postIdToLikedPost[likedPost.postId] = [likedPost];
-      } else {
-        postIdToLikedPost[likedPost.postId].push(likedPost);
-      }
-    });
-
-    return ids.map((id) => postIdToLikedPost[id] || []);
-  });
+  }
 }

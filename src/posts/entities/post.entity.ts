@@ -50,12 +50,6 @@ export class Post extends BaseEntity {
   })
   taggedPosts?: TaggedPost[];
 
-  @Column({ default: 0 })
-  likes: number;
-
-  @Column({ default: 0 })
-  disLikes: number;
-
   @OneToMany(() => LikedPost, (likedPost) => likedPost.post, {
     cascade: true,
   })

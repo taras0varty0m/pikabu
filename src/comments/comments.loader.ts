@@ -1,29 +1,22 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
-import { LikedComment } from 'src/liked-comments/entities/liked-comment.entity';
-import { LikedCommentsRepository } from 'src/liked-comments/liked-comments.repository';
+import { CommentsRepository } from 'src/comments/comments.repository';
+import { NestDataLoader } from 'src/libs/NestDataloader';
+import { CommentModel } from './dto/comment.model';
 
-@Injectable({ scope: Scope.REQUEST })
-export class CommentLoaders {
-  constructor(
-    private readonly likedCommentsRepository: LikedCommentsRepository,
-  ) {}
+@Injectable()
+export class CommentDataLoader
+  implements NestDataLoader<string, CommentModel[]>
+{
+  constructor(private readonly commentsRepository: CommentsRepository) {}
 
-  readonly batchCommentLikes = new DataLoader(async (ids: string[]) => {
-    const likedComments = await this.likedCommentsRepository.getByCommentIds(
-      ids,
-    );
+  generateDataLoader(): DataLoader<string, CommentModel[], string> {
+    return new DataLoader(async (postIds) => {
+      const comments = await this.commentsRepository.getByPostIds(
+        postIds as string[],
+      );
 
-    const commentIdToLikedComment: { [key: string]: LikedComment[] } = {};
-
-    likedComments.forEach((likedComment) => {
-      if (!commentIdToLikedComment[likedComment.commentId]) {
-        commentIdToLikedComment[likedComment.commentId] = [likedComment];
-      } else {
-        commentIdToLikedComment[likedComment.commentId].push(likedComment);
-      }
+      return postIds.map((id) => comments.filter((post) => post.postId === id));
     });
-
-    return ids.map((id) => commentIdToLikedComment[id] || []);
-  });
+  }
 }

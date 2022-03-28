@@ -14,6 +14,20 @@ import { LikedPostsModule } from './liked-posts/liked-posts.module';
 import { LikedCommentsModule } from './liked-comments/liked-comments.module';
 import { FavoritedCommentsModule } from './favorited-comments/favorited-comments.module';
 import { FavoritedPostsModule } from './favorited-posts/favorited-posts.module';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { DataLoaderInterceptor } from './libs/NestDataloader';
+import { FavoritedPostDataLoader } from './favorited-posts/favorited-posts.loader';
+import { FavoritedPostsRepository } from './favorited-posts/favorited-posts.repository';
+import { FavoritedCommentDataLoader } from './favorited-comments/favorited-comments.loader';
+import { FavoritedCommentsRepository } from './favorited-comments/favorited-comments.repository';
+import { PostDataLoader } from './posts/posts.loader';
+import { PostsRepository } from './posts/posts.repository';
+import { LikedPostDataLoader } from './liked-posts/liked-posts.loader';
+import { LikedPostsRepository } from './liked-posts/liked-posts.repository';
+import { LikedCommentsRepository } from './liked-comments/liked-comments.repository';
+import { LikedCommentDataLoader } from './liked-comments/liked-comments.loader';
+import { CommentsRepository } from './comments/comments.repository';
+import { CommentDataLoader } from './comments/comments.loader';
 
 @Module({
   imports: [
@@ -49,6 +63,14 @@ import { FavoritedPostsModule } from './favorited-posts/favorited-posts.module';
         logging: true,
       }),
     }),
+    TypeOrmModule.forFeature([
+      FavoritedPostsRepository,
+      FavoritedCommentsRepository,
+      PostsRepository,
+      LikedPostsRepository,
+      LikedCommentsRepository,
+      CommentsRepository,
+    ]),
     AuthModule,
     UsersModule,
     PostsModule,
@@ -58,6 +80,36 @@ import { FavoritedPostsModule } from './favorited-posts/favorited-posts.module';
     LikedCommentsModule,
     FavoritedCommentsModule,
     FavoritedPostsModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: DataLoaderInterceptor,
+    },
+    {
+      provide: FavoritedPostDataLoader.name,
+      useClass: FavoritedPostDataLoader,
+    },
+    {
+      provide: FavoritedCommentDataLoader.name,
+      useClass: FavoritedCommentDataLoader,
+    },
+    {
+      provide: PostDataLoader.name,
+      useClass: PostDataLoader,
+    },
+    {
+      provide: LikedPostDataLoader.name,
+      useClass: LikedPostDataLoader,
+    },
+    {
+      provide: LikedCommentDataLoader.name,
+      useClass: LikedCommentDataLoader,
+    },
+    {
+      provide: CommentDataLoader.name,
+      useClass: CommentDataLoader,
+    },
   ],
 })
 export class AppModule {}

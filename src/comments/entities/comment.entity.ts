@@ -30,12 +30,6 @@ export class Comment extends BaseEntity {
   @Column('text', { array: true, default: [] })
   images?: string[];
 
-  @Column({ default: 0 })
-  likes: number;
-
-  @Column({ default: 0 })
-  disLikes: number;
-
   @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
   user?: User;
 

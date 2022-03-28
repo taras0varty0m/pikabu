@@ -2,7 +2,6 @@ import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { UseGuards } from '@nestjs/common';
 import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
-import { CommentLoaders } from '../comments.loader';
 import { CommentsService } from '../comments.service';
 import { CommentModel } from '../dto/comment.model';
 import { CreateCommentInput } from '../dto/create-comment.input';
@@ -11,10 +10,7 @@ import { EditCommentsGuard } from '../edit-comments.guard';
 
 @Resolver(() => CommentModel)
 export class CommentsMutationsResolver {
-  constructor(
-    private readonly commentsService: CommentsService,
-    private readonly commentLoaders: CommentLoaders,
-  ) {}
+  constructor(private readonly commentsService: CommentsService) {}
 
   @UseGuards(GraphqlJwtAuthGuard)
   @Mutation(() => CommentModel)

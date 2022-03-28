@@ -4,7 +4,6 @@ import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from './users.repository';
 import { AuthModule } from 'src/auth/auth.module';
-import { UserLoaders } from './users.loader';
 import { UsersMutationsResolver } from './resolvers/users.mutations.resolver';
 import { UsersQueriesResolver } from './resolvers/users.queries.resolver';
 import { UsersFieldsResolver } from './resolvers/users.fields.resolver';
@@ -27,7 +26,6 @@ import { PostsRepository } from 'src/posts/posts.repository';
     UsersMutationsResolver,
     UsersFieldsResolver,
     UsersQueriesResolver,
-    UserLoaders,
   ],
   exports: [UsersService],
 })
