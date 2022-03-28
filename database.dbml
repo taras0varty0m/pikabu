@@ -1,0 +1,53 @@
+Table users {
+  id int [PK]
+  email varchar
+  password varchar
+}
+Table posts {
+  id int [PK]
+  title varchar
+  userId int [ref: > users.id]
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
+}
+Table taggedPosts {
+   id int [PK]
+   postId int [ref: > posts.id]
+   tagId int [ref: > tags.id]
+}
+
+Table tags {
+  id int [PK]
+  title varchar
+}
+
+Table likes {
+  id int [PK]
+  type varchar
+   createdAt datetime [default: `now()`]
+}
+
+Table likedPosts {
+   id int [PK]
+   postId int [ref: > posts.id]
+   likeId int [ref: > likes.id]
+}
+
+Table likedComments {
+   id int [PK]
+   commentId int [ref: > comments.id]
+   likeId int [ref: > likes.id]
+}
+Table comments {
+  id int [PK]
+  content varchar
+  userId int [ref: > users.id]
+  postId int [ref: > posts.id]
+  createdAt datetime [default: `now()`]
+  updatedAt datetime [default: `now()`]
+}
+Table images {
+  id int [PK]
+  link varchar
+  postId int [ref: > posts.id]
+}
