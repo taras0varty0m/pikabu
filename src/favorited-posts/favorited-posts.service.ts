@@ -9,7 +9,7 @@ export class FavoritedPostsService {
   constructor(private favoritedPostsRepository: FavoritedPostsRepository) {}
   async create(
     createFavoritedPostInput: CreateFavoritedPostInput,
-    userId: number,
+    userId: string,
   ) {
     const favoritedPost = FavoritedPost.create({
       ...createFavoritedPostInput,
@@ -18,7 +18,7 @@ export class FavoritedPostsService {
     return await favoritedPost.save();
   }
 
-  async findWithPaginate(options: IPaginationOptions, userId: number) {
+  async findWithPaginate(options: IPaginationOptions, userId: string) {
     return paginate<FavoritedPost>(this.favoritedPostsRepository, options, {
       order: {
         id: 'DESC',
@@ -27,20 +27,20 @@ export class FavoritedPostsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const favoritedPost = await this.favoritedPostsRepository.findOne(id);
     if (!favoritedPost)
       throw new NotFoundException(`FavoritedPost ${id} not found`);
     return favoritedPost;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const favoritedPost = await this.favoritedPostsRepository.findOne(id);
     if (!favoritedPost) throw new NotFoundException(`FavoritedPost not found`);
     return await this.favoritedPostsRepository.remove(favoritedPost);
   }
 
-  findPostsByUserId(userId: number) {
+  findPostsByUserId(userId: string) {
     return this.favoritedPostsRepository.find({ userId });
   }
 }

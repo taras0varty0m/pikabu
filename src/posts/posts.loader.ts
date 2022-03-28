@@ -12,7 +12,7 @@ export class PostLoaders {
     private readonly likedPostsRepository: LikedPostsRepository,
   ) {}
 
-  readonly batchComments = new DataLoader(async (ids: number[]) => {
+  readonly batchComments = new DataLoader(async (ids: string[]) => {
     const comments = await this.commentRepository.getByPostIds(ids);
 
     const postIdToComments: { [key: string]: Comment[] } = {};
@@ -28,7 +28,7 @@ export class PostLoaders {
     return ids.map((id) => postIdToComments[id] || []);
   });
 
-  readonly batchPostLikes = new DataLoader(async (ids: number[]) => {
+  readonly batchPostLikes = new DataLoader(async (ids: string[]) => {
     const likedPosts = await this.likedPostsRepository.getByPostIds(ids);
 
     const postIdToLikedPost: { [key: string]: LikedPost[] } = {};

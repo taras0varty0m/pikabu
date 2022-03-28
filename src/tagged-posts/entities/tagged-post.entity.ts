@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { Post } from 'src/posts/entities/post.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
@@ -11,8 +11,8 @@ import {
 
 @Entity()
 export class TaggedPost extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   title: string;
@@ -21,11 +21,11 @@ export class TaggedPost extends BaseEntity {
   user?: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => Post, (post) => post.taggedPosts, { onDelete: 'CASCADE' })
   post?: Post;
 
   @Column()
-  postId: number;
+  postId: string;
 }

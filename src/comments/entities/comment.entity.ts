@@ -15,8 +15,8 @@ import {
 
 @Entity()
 export class Comment extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   content: string;
@@ -25,7 +25,7 @@ export class Comment extends BaseEntity {
   post?: Post;
 
   @Column()
-  postId: number;
+  postId: string;
 
   @Column('text', { array: true, default: [] })
   images?: string[];
@@ -40,7 +40,7 @@ export class Comment extends BaseEntity {
   user?: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @CreateDateColumn()
   createdAt: Date;

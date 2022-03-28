@@ -11,7 +11,7 @@ export class FavoritedCommentsService {
   ) {}
   async create(
     createFavoritedCommentInput: CreateFavoritedCommentInput,
-    userId: number,
+    userId: string,
   ) {
     const favoritedComment = FavoritedComment.create({
       ...createFavoritedCommentInput,
@@ -20,7 +20,7 @@ export class FavoritedCommentsService {
     return await favoritedComment.save();
   }
 
-  async findWithPaginate(options: IPaginationOptions, userId: number) {
+  async findWithPaginate(options: IPaginationOptions, userId: string) {
     return paginate<FavoritedComment>(
       this.favoritedCommentsRepository,
       options,
@@ -33,21 +33,21 @@ export class FavoritedCommentsService {
     );
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const favoritedComment = await this.favoritedCommentsRepository.findOne(id);
     if (!favoritedComment)
       throw new NotFoundException(`FavoritedComment ${id} not found`);
     return favoritedComment;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const favoritedComment = await this.favoritedCommentsRepository.findOne(id);
     if (!favoritedComment)
       throw new NotFoundException(`FavoritedComment not found`);
     return await this.favoritedCommentsRepository.remove(favoritedComment);
   }
 
-  findPostsByUserId(userId: number) {
+  findPostsByUserId(userId: string) {
     return this.favoritedCommentsRepository.find({ userId });
   }
 }

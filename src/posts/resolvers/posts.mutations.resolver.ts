@@ -1,20 +1,16 @@
-import { Resolver, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { PostsService } from '../posts.service';
 import { CreatePostInput } from '../dto/create-post.input';
 import { UpdatePostInput } from '../dto/update-post.input';
 import { UseGuards } from '@nestjs/common';
 import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
 import { EditPostsGuard } from '../edit-posts.guard';
-import { PostLoaders } from '../posts.loader';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { PostModel } from '../dto/post.model';
 
 @Resolver(() => PostModel)
 export class PostsMutationsResolver {
-  constructor(
-    private readonly postsService: PostsService,
-    private readonly postLoaders: PostLoaders,
-  ) {}
+  constructor(private readonly postsService: PostsService) {}
 
   @UseGuards(GraphqlJwtAuthGuard)
   @Mutation(() => PostModel)
@@ -33,7 +29,7 @@ export class PostsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard, EditPostsGuard)
   @Mutation(() => PostModel)
-  removePost(@Args('id', { type: () => Int }) id: number) {
+  removePost(@Args('id', { type: () => ID }) id: string) {
     return this.postsService.remove(id);
   }
 }

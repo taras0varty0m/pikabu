@@ -12,14 +12,14 @@ import { TypeLike } from 'src/common/type-like.enum';
 
 @Entity()
 export class LikedPost extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
   user?: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column({
     type: 'enum',
@@ -34,5 +34,5 @@ export class LikedPost extends BaseEntity {
   post?: Post;
 
   @Column()
-  postId: number;
+  postId: string;
 }

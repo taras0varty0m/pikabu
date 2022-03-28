@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { TaggedPostsService } from '../tagged-posts.service';
 import { CreateTaggedPostInput } from '../dto/create-tagged-post.input';
 import { UseGuards } from '@nestjs/common';
@@ -22,7 +22,7 @@ export class TaggedPostsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard, EditTaggedPostsGuard)
   @Mutation(() => TaggedPostModel)
-  removeTaggedPost(@Args('id', { type: () => Int }) id: number) {
+  removeTaggedPost(@Args('id', { type: () => ID }) id: string) {
     return this.taggedPostsService.remove(id);
   }
 }

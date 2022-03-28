@@ -1,13 +1,13 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 
 @ObjectType()
 export class FavoritedCommentModel {
-  @Field(() => Int)
-  id: number;
+  @Field(() => ID)
+  id: string;
 
-  @Field(() => Int)
-  userId: number;
+  @Field(() => ID)
+  userId: string;
 
-  @Field(() => Int)
-  commentId: number;
+  @Field(() => ID)
+  commentId: string;
 }

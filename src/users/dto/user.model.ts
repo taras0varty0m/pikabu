@@ -1,12 +1,12 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { FavoritedCommentModel } from 'src/favorited-comments/dto/favorited-comment.model';
 import { FavoritedPostModel } from 'src/favorited-posts/dto/favorited-post.model';
 import { PostModel } from 'src/posts/dto/post.model';
 
 @ObjectType()
 export class UserModel {
-  @Field(() => Int)
-  id: number;
+  @Field(() => ID)
+  id: string;
 
   @Field(() => String)
   email: string;

@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Args, ID } from '@nestjs/graphql';
 import { PaginateInput } from 'src/common/paginate.input';
 import { FavoritedCommentModel } from '../dto/favorited-comment.model';
 import { PaginatedFavoritedComments } from '../dto/paginate-favorited-comment.dto';
@@ -13,7 +13,7 @@ export class FavoritedCommentsQueriesResolver {
   @Query(() => PaginatedFavoritedComments, { name: 'favoritedComments' })
   findAllByUserId(
     @Args() options: PaginateInput,
-    @Args('userId', { type: () => Int }) userId: number,
+    @Args('userId', { type: () => ID }) userId: string,
   ) {
     return this.favoritedCommentsService.findWithPaginate(
       {
@@ -26,7 +26,7 @@ export class FavoritedCommentsQueriesResolver {
   }
 
   @Query(() => FavoritedCommentModel, { name: 'favoritedComment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.favoritedCommentsService.findOne(id);
   }
 }

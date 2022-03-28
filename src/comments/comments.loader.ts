@@ -9,7 +9,7 @@ export class CommentLoaders {
     private readonly likedCommentsRepository: LikedCommentsRepository,
   ) {}
 
-  readonly batchCommentLikes = new DataLoader(async (ids: number[]) => {
+  readonly batchCommentLikes = new DataLoader(async (ids: string[]) => {
     const likedComments = await this.likedCommentsRepository.getByCommentIds(
       ids,
     );

@@ -16,8 +16,8 @@ import {
 
 @Entity()
 export class Post extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column()
   title: string;
@@ -29,7 +29,7 @@ export class Post extends BaseEntity {
   user?: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @CreateDateColumn()
   createdAt: Date;

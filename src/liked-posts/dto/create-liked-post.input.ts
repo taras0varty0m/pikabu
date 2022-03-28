@@ -1,12 +1,12 @@
-import { InputType, Field, Int } from '@nestjs/graphql';
+import { InputType, Field, ID } from '@nestjs/graphql';
 import { IsDefined, IsEnum } from 'class-validator';
 import { TypeLike } from 'src/common/type-like.enum';
 
 @InputType()
 export class CreateLikedPostInput {
-  @Field(() => Int)
+  @Field(() => ID)
   @IsDefined()
-  postId: number;
+  postId: string;
 
   @Field(() => TypeLike)
   @IsEnum(TypeLike)

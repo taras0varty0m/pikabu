@@ -1,15 +1,15 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 @ObjectType()
 export class TaggedPostModel {
-  @Field(() => Int)
-  id: number;
+  @Field(() => ID)
+  id: string;
 
   @Field()
   title: string;
 
-  @Field(() => Int)
-  userId: number;
+  @Field(() => ID)
+  userId: string;
 
-  @Field(() => Int)
-  postId: number;
+  @Field(() => ID)
+  postId: string;
 }

@@ -10,7 +10,7 @@ import { Comment } from './entities/comment.entity';
 export class CommentsService {
   constructor(private commentsRepository: CommentsRepository) {}
 
-  async create(createCommentInput: CreateCommentInput, userId: number) {
+  async create(createCommentInput: CreateCommentInput, userId: string) {
     const comment = Comment.create({ ...createCommentInput, userId });
     return await comment.save();
   }
@@ -21,7 +21,7 @@ export class CommentsService {
 
   async findWithPaginate(
     options: IPaginationOptions,
-    userId: number,
+    userId: string,
     sortOptions?: CommentSort[],
   ) {
     return this.commentsRepository.getAllWithPaginationOptionsByUserId(
@@ -31,13 +31,13 @@ export class CommentsService {
     );
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const comment = await this.commentsRepository.findOne(id);
     if (!comment) throw new NotFoundException(`Comment ${id} not found`);
     return comment;
   }
 
-  async update(id: number, updateCommentInput: UpdateCommentInput) {
+  async update(id: string, updateCommentInput: UpdateCommentInput) {
     const comment = await this.commentsRepository.preload({
       id,
       ...updateCommentInput,
@@ -46,13 +46,13 @@ export class CommentsService {
     return await comment.save();
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const comment = await this.commentsRepository.findOne(id);
     if (!comment) throw new NotFoundException(`Comment not found`);
     return await this.commentsRepository.remove(comment);
   }
 
-  findAllByPostId(postId: number, options: IPaginationOptions) {
+  findAllByPostId(postId: string, options: IPaginationOptions) {
     return paginate<Comment>(this.commentsRepository, options, {
       postId,
     });

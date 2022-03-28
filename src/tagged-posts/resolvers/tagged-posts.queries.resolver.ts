@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Args, ID } from '@nestjs/graphql';
 import { TaggedPostsService } from '../tagged-posts.service';
 import { TaggedPostModel } from '../dto/tagged-post.model';
 
@@ -12,7 +12,7 @@ export class TaggedPostsQueriesResolver {
   }
 
   @Query(() => TaggedPostModel, { name: 'taggedPost' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.taggedPostsService.findOne(id);
   }
 }

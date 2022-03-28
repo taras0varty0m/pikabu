@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Args, ID } from '@nestjs/graphql';
 import { PaginateInput } from 'src/common/paginate.input';
 import { CommentsService } from '../comments.service';
 import { CommentSort } from '../dto/comment-sort.enum';
@@ -12,7 +12,7 @@ export class CommentsQueriesResolver {
   @Query(() => PaginatedComments, { name: 'comments' })
   findAllByUserId(
     @Args() options: PaginateInput,
-    @Args('userId', { type: () => Int }) userId: number,
+    @Args('userId', { type: () => ID }) userId: string,
     @Args('commentSort', { type: () => [CommentSort], nullable: true })
     sortOptions: CommentSort[],
   ) {
@@ -20,7 +20,7 @@ export class CommentsQueriesResolver {
   }
 
   @Query(() => CommentModel, { name: 'comment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.commentsService.findOne(id);
   }
 }

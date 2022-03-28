@@ -10,18 +10,18 @@ import {
 
 @Entity()
 export class FavoritedPost extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
   user?: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => Post, (post) => post.favoritedPosts, { onDelete: 'CASCADE' })
   post?: Post;
 
   @Column()
-  postId: number;
+  postId: string;
 }

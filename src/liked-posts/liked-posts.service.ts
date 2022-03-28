@@ -6,12 +6,12 @@ import { LikedPostsRepository } from './liked-posts.repository';
 @Injectable()
 export class LikedPostsService {
   constructor(private likedPostsRepository: LikedPostsRepository) {}
-  async create(createLikedPostInput: CreateLikedPostInput, userId: number) {
+  async create(createLikedPostInput: CreateLikedPostInput, userId: string) {
     const likedPost = LikedPost.create({ ...createLikedPostInput, userId });
     return await likedPost.save();
   }
 
-  findAllByPostId(postId: number) {
+  findAllByPostId(postId: string) {
     return this.likedPostsRepository.find({ postId });
   }
 
@@ -19,13 +19,13 @@ export class LikedPostsService {
     return this.likedPostsRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const likedPost = await this.likedPostsRepository.findOne(id);
     if (!likedPost) throw new NotFoundException(`LikedPost ${id} not found`);
     return likedPost;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const likedPost = await this.likedPostsRepository.findOne(id);
     if (!likedPost) throw new NotFoundException(`LikedPost not found`);
     return await this.likedPostsRepository.remove(likedPost);

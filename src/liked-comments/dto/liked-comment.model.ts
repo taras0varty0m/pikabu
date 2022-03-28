@@ -1,13 +1,13 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import { TypeLike } from 'src/common/type-like.enum';
 
 @ObjectType()
 export class LikedCommentModel {
-  @Field(() => Int)
-  id: number;
+  @Field(() => ID)
+  id: string;
 
-  @Field(() => Int)
-  userId: number;
+  @Field(() => ID)
+  userId: string;
 
   @Field(() => TypeLike)
   type: TypeLike;
@@ -15,6 +15,6 @@ export class LikedCommentModel {
   @Field(() => Date)
   createdAt: Date;
 
-  @Field(() => Int)
-  commentId: number;
+  @Field(() => ID)
+  commentId: string;
 }

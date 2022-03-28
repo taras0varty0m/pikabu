@@ -8,7 +8,7 @@ export class LikedCommentsService {
   constructor(private likedCommentsRepository: LikedCommentsRepository) {}
   async create(
     createLikedCommentInput: CreateLikedCommentInput,
-    userId: number,
+    userId: string,
   ) {
     const likedComment = LikedComment.create({
       ...createLikedCommentInput,
@@ -21,14 +21,14 @@ export class LikedCommentsService {
     return this.likedCommentsRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const likedComment = await this.likedCommentsRepository.findOne(id);
     if (!likedComment)
       throw new NotFoundException(`LikedComment ${id} not found`);
     return likedComment;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const likedComment = await this.likedCommentsRepository.findOne(id);
     if (!likedComment) throw new NotFoundException(`LikedComment not found`);
     return await this.likedCommentsRepository.remove(likedComment);

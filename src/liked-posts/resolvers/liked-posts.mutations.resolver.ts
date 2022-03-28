@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
@@ -22,7 +22,7 @@ export class LikedPostsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard, EditLikedPostsGuard)
   @Mutation(() => LikedPostModel)
-  removeLikedPost(@Args('id', { type: () => Int }) id: number) {
+  removeLikedPost(@Args('id', { type: () => ID }) id: string) {
     return this.likedPostsService.remove(id);
   }
 }

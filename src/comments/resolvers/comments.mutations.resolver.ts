@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { UseGuards } from '@nestjs/common';
 import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
@@ -38,7 +38,7 @@ export class CommentsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard, EditCommentsGuard)
   @Mutation(() => CommentModel)
-  removeComment(@Args('id', { type: () => Int }) id: number) {
+  removeComment(@Args('id', { type: () => ID }) id: string) {
     return this.commentsService.remove(id);
   }
 }

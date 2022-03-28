@@ -10,14 +10,14 @@ import {
 
 @Entity()
 export class FavoritedComment extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
   user?: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => Comment, (comment) => comment.favoritedComments, {
     onDelete: 'CASCADE',
@@ -25,5 +25,5 @@ export class FavoritedComment extends BaseEntity {
   comment?: Comment;
 
   @Column()
-  commentId: number;
+  commentId: string;
 }

@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { CreateLikedCommentInput } from '../dto/create-liked-comment.input';
@@ -23,7 +23,7 @@ export class LikedCommentsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard, EditLikedCommentsGuard)
   @Mutation(() => LikedCommentModel)
-  removeLikedComment(@Args('id', { type: () => Int }) id: number) {
+  removeLikedComment(@Args('id', { type: () => ID }) id: string) {
     return this.likedCommentsService.remove(id);
   }
 }

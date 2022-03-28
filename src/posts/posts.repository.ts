@@ -7,7 +7,7 @@ import { Post } from './entities/post.entity';
 
 @EntityRepository(Post)
 export class PostsRepository extends Repository<Post> {
-  async getByUserIds(ids: number[]) {
+  async getByUserIds(ids: string[]) {
     return this.createQueryBuilder('post')
       .where('post.userId IN (:...ids)', { ids })
       .getMany();

@@ -6,7 +6,7 @@ import { Comment } from './entities/comment.entity';
 
 @EntityRepository(Comment)
 export class CommentsRepository extends Repository<Comment> {
-  async getByPostIds(ids: number[]) {
+  async getByPostIds(ids: string[]) {
     return this.createQueryBuilder('comment')
       .where('comment.postId IN (:...ids)', { ids })
       .getMany();
@@ -14,7 +14,7 @@ export class CommentsRepository extends Repository<Comment> {
 
   getAllWithPaginationOptionsByUserId(
     options: IPaginationOptions,
-    userId: number,
+    userId: string,
     sortOptions?: CommentSort[],
   ) {
     const queryBuilder = this.createQueryBuilder('comments');

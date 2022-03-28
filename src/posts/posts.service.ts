@@ -11,7 +11,7 @@ import { PostsRepository } from './posts.repository';
 export class PostsService {
   constructor(private postsRepository: PostsRepository) {}
 
-  async create(createPostInput: CreatePostInput, userId: number) {
+  async create(createPostInput: CreatePostInput, userId: string) {
     const post = Post.create({ ...createPostInput, userId });
     return await post.save();
   }
@@ -24,13 +24,13 @@ export class PostsService {
     return this.postsRepository.find({ where: { title: title } });
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const post = await this.postsRepository.findOne(id);
     if (!post) throw new NotFoundException(`Post ${id} not found`);
     return post;
   }
 
-  async update(id: number, updatePostInput: UpdatePostInput) {
+  async update(id: string, updatePostInput: UpdatePostInput) {
     const post = await this.postsRepository.preload({
       id,
       ...updatePostInput,
@@ -39,7 +39,7 @@ export class PostsService {
     return await post.save();
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const post = await this.postsRepository.findOne(id);
     if (!post) throw new NotFoundException(`Post not found`);
     return await this.postsRepository.remove(post);
@@ -59,7 +59,7 @@ export class PostsService {
     );
   }
 
-  findPostsByUserId(userId: number) {
+  findPostsByUserId(userId: string) {
     return this.postsRepository.find({ userId });
   }
 }

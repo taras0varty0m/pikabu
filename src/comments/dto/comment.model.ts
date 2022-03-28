@@ -1,22 +1,22 @@
-import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { LikedCommentModel } from 'src/liked-comments/dto/liked-comment.model';
 
 @ObjectType()
 export class CommentModel {
-  @Field(() => Int)
-  id: number;
+  @Field(() => ID)
+  id: string;
 
   @Field(() => String)
   content: string;
 
-  @Field(() => Int)
-  postId: number;
+  @Field(() => ID)
+  postId: string;
 
   @Field(() => [String])
   images?: string[];
 
-  @Field(() => Int)
-  userId: number;
+  @Field(() => ID)
+  userId: string;
 
   @Field(() => Date)
   createdAt: Date;

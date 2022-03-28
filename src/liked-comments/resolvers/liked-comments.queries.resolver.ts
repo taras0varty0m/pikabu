@@ -1,4 +1,4 @@
-import { Resolver, Query, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Args, ID } from '@nestjs/graphql';
 import { LikedCommentModel } from '../dto/liked-comment.model';
 import { LikedCommentsService } from '../liked-comments.service';
 
@@ -12,7 +12,7 @@ export class LikedCommentsQueriesResolver {
   }
 
   @Query(() => LikedCommentModel, { name: 'likedComment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
+  findOne(@Args('id', { type: () => ID }) id: string) {
     return this.likedCommentsService.findOne(id);
   }
 }

@@ -12,14 +12,14 @@ import {
 
 @Entity()
 export class LikedComment extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
   user?: User;
 
   @Column()
-  userId: number;
+  userId: string;
 
   @Column({
     type: 'enum',
@@ -36,5 +36,5 @@ export class LikedComment extends BaseEntity {
   comment?: Comment;
 
   @Column()
-  commentId: number;
+  commentId: string;
 }

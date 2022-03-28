@@ -15,7 +15,7 @@ export class UserLoaders {
     private readonly favoritedCommentsRepository: FavoritedCommentsRepository,
   ) {}
 
-  readonly batchPosts = new DataLoader(async (ids: number[]) => {
+  readonly batchPosts = new DataLoader(async (ids: string[]) => {
     const posts = await this.postsRepository.getByUserIds(ids);
 
     const userIdToPosts: { [key: string]: Post[] } = {};
@@ -31,7 +31,7 @@ export class UserLoaders {
     return ids.map((id) => userIdToPosts[id] || []);
   });
 
-  readonly batchFavoritedPosts = new DataLoader(async (ids: number[]) => {
+  readonly batchFavoritedPosts = new DataLoader(async (ids: string[]) => {
     const posts = await this.favoritedPostsRepository.getByUserIds(ids);
 
     const userIdToFavoritePosts: { [key: string]: FavoritedPost[] } = {};
@@ -47,7 +47,7 @@ export class UserLoaders {
     return ids.map((id) => userIdToFavoritePosts[id] || []);
   });
 
-  readonly batchFavoritedComments = new DataLoader(async (ids: number[]) => {
+  readonly batchFavoritedComments = new DataLoader(async (ids: string[]) => {
     const comments = await this.favoritedCommentsRepository.getByUserIds(ids);
 
     const userIdToFavoriteComments: { [key: string]: FavoritedComment[] } = {};

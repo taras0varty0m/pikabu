@@ -4,7 +4,7 @@ import { FavoritedComment } from './entities/favorited-comment.entity';
 
 @EntityRepository(FavoritedComment)
 export class FavoritedCommentsRepository extends Repository<FavoritedComment> {
-  async getByUserIds(ids: number[]) {
+  async getByUserIds(ids: string[]) {
     return this.createQueryBuilder('comment')
       .where('comment.userId IN (:...ids)', { ids })
       .getMany();

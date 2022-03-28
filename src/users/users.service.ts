@@ -17,13 +17,13 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async findOne(id: number) {
+  async findOne(id: string) {
     const user = await this.usersRepository.findOne(id);
     if (!user) throw new NotFoundException(`User ${id} not found`);
     return user;
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const user = await this.usersRepository.findOne(id);
     if (!user) throw new NotFoundException(`User not found`);
     return await this.usersRepository.remove(user);
@@ -37,7 +37,7 @@ export class UsersService {
     return await user.save();
   }
 
-  async update(id: number, updateUserInput: UpdateUserInput) {
+  async update(id: string, updateUserInput: UpdateUserInput) {
     const user = await this.usersRepository.preload({
       id,
       ...updateUserInput,
