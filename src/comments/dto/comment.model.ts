@@ -24,11 +24,11 @@ export class CommentModel {
   @Field(() => Date)
   updatedAt: Date;
 
-  @Field(() => Int)
-  likes: number;
+  @Field(() => Int, { defaultValue: 0, nullable: true })
+  likes?: number;
 
-  @Field(() => Int)
-  disLikes: number;
+  @Field(() => Int, { defaultValue: 0, nullable: true })
+  disLikes?: number;
 
   @Field(() => [LikedCommentModel])
   likedComments?: LikedCommentModel[];

@@ -1,13 +1,16 @@
-import { Resolver, Parent, ResolveField } from '@nestjs/graphql';
+import { Resolver, Parent, ResolveField, Int } from '@nestjs/graphql';
 import { PostModel } from '../dto/post.model';
 import { LikedPostModel } from 'src/liked-posts/dto/liked-post.model';
 import { LikedPostDataLoader } from 'src/liked-posts/liked-posts.loader';
 import { Loader } from 'src/libs/NestDataloader';
 import { CommentModel } from 'src/comments/dto/comment.model';
 import { CommentDataLoader } from 'src/comments/comments.loader';
+import { LikedPostsRepository } from 'src/liked-posts/liked-posts.repository';
 
 @Resolver(() => PostModel)
 export class PostsFieldsResolver {
+  constructor(private readonly likedPostsRepository: LikedPostsRepository) {}
+
   @ResolveField(() => [LikedPostModel])
   async likedPosts(
     @Parent() { id, likedPosts }: PostModel,
@@ -26,5 +29,15 @@ export class PostsFieldsResolver {
   ) {
     if (comments) return comments;
     return await CommentDataLoader.load(id);
+  }
+
+  @ResolveField(() => Int)
+  async likes(@Parent() post: PostModel) {
+    return this.likedPostsRepository.getLikesByPostId(post.id);
+  }
+
+  @ResolveField(() => Int)
+  async disLikes(@Parent() post: PostModel) {
+    return this.likedPostsRepository.getDisLikesByPostId(post.id);
   }
 }
