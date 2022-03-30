@@ -1,6 +1,7 @@
-import { Resolver, Query, Args, ID } from '@nestjs/graphql';
-import { PaginateInput } from 'src/common/paginate.input';
+import { Resolver, Query, Args } from '@nestjs/graphql';
+import { GetWithPaginateByUserIdInput } from 'src/common/get-with-paginate-by-user-id.dto';
 import { FavoritedPostModel } from '../dto/favorited-post.model';
+import { GetFavoritedPostInput } from '../dto/get-favorited-post.dto';
 import { PaginatedFavoritedPosts } from '../dto/paginate-favorited-posts.dto';
 import { FavoritedPostsService } from '../favorited-posts.service';
 
@@ -10,21 +11,19 @@ export class FavoritedPostsQueriesResolver {
 
   @Query(() => PaginatedFavoritedPosts, { name: 'favoritedPosts' })
   findAllByUserId(
-    @Args() options: PaginateInput,
-    @Args('userId', { type: () => ID }) userId: string,
+    @Args('getFavoritedPostsWithPaginateByUserIdInput')
+    getWithPaginateByUserIdInput: GetWithPaginateByUserIdInput,
   ) {
     return this.favoritedPostsService.findWithPaginate(
-      {
-        limit: options.limit,
-        page: options.page,
-        route: '/',
-      },
-      userId,
+      getWithPaginateByUserIdInput,
     );
   }
 
   @Query(() => FavoritedPostModel, { name: 'favoritedPost' })
-  findOne(@Args('id', { type: () => ID }) id: string) {
-    return this.favoritedPostsService.findOne(id);
+  findOne(
+    @Args('getFavoritedPostInput')
+    getFavoritedPostInput: GetFavoritedPostInput,
+  ) {
+    return this.favoritedPostsService.findOne(getFavoritedPostInput);
   }
 }

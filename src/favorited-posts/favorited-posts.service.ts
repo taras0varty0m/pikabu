@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
+import { paginate } from 'nestjs-typeorm-paginate';
+import { GetWithPaginateByUserIdInput } from 'src/common/get-with-paginate-by-user-id.dto';
 import { CreateFavoritedPostInput } from './dto/create-favorited-post.input';
+import { GetFavoritedPostInput } from './dto/get-favorited-post.dto';
 import { FavoritedPost } from './entities/favorited-post.entity';
 import { FavoritedPostsRepository } from './favorited-posts.repository';
 
@@ -19,28 +21,43 @@ export class FavoritedPostsService {
     return await favoritedPost.save();
   }
 
-  async findWithPaginate(options: IPaginationOptions, userId: string) {
-    return paginate<FavoritedPost>(this.favoritedPostsRepository, options, {
-      order: {
-        id: 'DESC',
+  async findWithPaginate(
+    getWithPaginateByUserIdInput: GetWithPaginateByUserIdInput,
+  ) {
+    return paginate<FavoritedPost>(
+      this.favoritedPostsRepository,
+      getWithPaginateByUserIdInput.paginateOptions,
+      {
+        order: {
+          id: 'DESC',
+        },
+        userId: getWithPaginateByUserIdInput.userId,
       },
-      userId,
-    });
+    );
   }
 
-  async findOne(id: string) {
-    const favoritedPost = await this.favoritedPostsRepository.findOne(id);
+  async findOne(getFavoritedPostInput: GetFavoritedPostInput) {
+    const favoritedPost = await this.favoritedPostsRepository.findOne(
+      getFavoritedPostInput.id,
+    );
 
     if (!favoritedPost)
-      throw new NotFoundException(`FavoritedPost ${id} not found`);
+      throw new NotFoundException(
+        `FavoritedPost ${getFavoritedPostInput.id} not found`,
+      );
 
     return favoritedPost;
   }
 
-  async remove(id: string) {
-    const favoritedPost = await this.favoritedPostsRepository.findOne(id);
+  async remove(getFavoritedPostInput: GetFavoritedPostInput) {
+    const favoritedPost = await this.favoritedPostsRepository.findOne(
+      getFavoritedPostInput.id,
+    );
 
-    if (!favoritedPost) throw new NotFoundException(`FavoritedPost not found`);
+    if (!favoritedPost)
+      throw new NotFoundException(
+        `FavoritedPost ${getFavoritedPostInput.id} not found`,
+      );
 
     return await this.favoritedPostsRepository.remove(favoritedPost);
   }

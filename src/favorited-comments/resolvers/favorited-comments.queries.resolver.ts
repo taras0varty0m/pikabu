@@ -1,6 +1,7 @@
-import { Resolver, Query, Args, ID } from '@nestjs/graphql';
-import { PaginateInput } from 'src/common/paginate.input';
+import { Resolver, Query, Args } from '@nestjs/graphql';
 import { FavoritedCommentModel } from '../dto/favorited-comment.model';
+import { GetFavoritedCommentInput } from '../dto/get-favorited-comment.dto';
+import { GetWithPaginateByUserIdInput } from '../../common/get-with-paginate-by-user-id.dto';
 import { PaginatedFavoritedComments } from '../dto/paginate-favorited-comment.dto';
 import { FavoritedCommentsService } from '../favorited-comments.service';
 
@@ -12,21 +13,19 @@ export class FavoritedCommentsQueriesResolver {
 
   @Query(() => PaginatedFavoritedComments, { name: 'favoritedComments' })
   findAllByUserId(
-    @Args() options: PaginateInput,
-    @Args('userId', { type: () => ID }) userId: string,
+    @Args('getFavoritedCommentsWithPaginateByUserIdInput')
+    getWithPaginateByUserIdInput: GetWithPaginateByUserIdInput,
   ) {
     return this.favoritedCommentsService.findWithPaginate(
-      {
-        limit: options.limit,
-        page: options.page,
-        route: '/',
-      },
-      userId,
+      getWithPaginateByUserIdInput,
     );
   }
 
   @Query(() => FavoritedCommentModel, { name: 'favoritedComment' })
-  findOne(@Args('id', { type: () => ID }) id: string) {
-    return this.favoritedCommentsService.findOne(id);
+  findOne(
+    @Args('getFavoritedCommentInput')
+    getFavoritedCommentInput: GetFavoritedCommentInput,
+  ) {
+    return this.favoritedCommentsService.findOne(getFavoritedCommentInput);
   }
 }

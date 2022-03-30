@@ -4,6 +4,7 @@ import { ResponseSignInUserDto } from 'src/auth/dto/response-login-user.dto';
 import { SignInUserInput } from 'src/auth/dto/sign-in.input';
 import { UsersService } from '../users.service';
 import { UserModel } from '../dto/user.model';
+import { GetUserInput } from '../dto/get-user.dto';
 
 @Resolver(() => UserModel)
 export class UsersQueriesResolver {
@@ -22,7 +23,10 @@ export class UsersQueriesResolver {
   }
 
   @Query(() => UserModel, { name: 'user' })
-  findOne(@Args('userId') userId: string) {
-    return this.usersService.findOne(userId);
+  findOne(
+    @Args('getUserInput')
+    getUserInput: GetUserInput,
+  ) {
+    return this.usersService.findOne(getUserInput);
   }
 }

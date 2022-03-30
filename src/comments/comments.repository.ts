@@ -1,7 +1,8 @@
-import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
+import { paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { EntityRepository } from 'typeorm/decorator/EntityRepository';
 import { CommentSort } from './dto/comment-sort.enum';
+import { GetCommentsInput } from './dto/get-comments.dto';
 import { Comment } from './entities/comment.entity';
 
 @EntityRepository(Comment)
@@ -13,10 +14,14 @@ export class CommentsRepository extends Repository<Comment> {
   }
 
   getAllWithPaginationOptionsByUserId(
-    options: IPaginationOptions,
-    userId: string,
-    sortOptions?: CommentSort[],
+    getCommentWithPaginateAndFilterByUserIdInput: GetCommentsInput,
   ) {
+    const {
+      sortOptions,
+      paginateOptions: options,
+      userId,
+    } = getCommentWithPaginateAndFilterByUserIdInput;
+
     const queryBuilder = this.createQueryBuilder('comments');
 
     if (sortOptions) {

@@ -1,5 +1,5 @@
 import { InputType, Field, ID } from '@nestjs/graphql';
-import { IsString, IsNotEmpty, IsDefined } from 'class-validator';
+import { IsString, IsNotEmpty, IsDefined, MaxLength } from 'class-validator';
 
 @InputType()
 export class CreateCommentInput {
@@ -13,6 +13,10 @@ export class CreateCommentInput {
   @IsDefined()
   content: string;
 
-  @Field(() => [String])
-  images: string[];
+  @IsString({ each: true })
+  @IsNotEmpty({ each: true })
+  @IsDefined({ each: true })
+  @MaxLength(50, { each: true })
+  @Field(() => [String], { defaultValue: [] })
+  images?: string[];
 }

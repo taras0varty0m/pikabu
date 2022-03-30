@@ -1,6 +1,7 @@
-import { Resolver, Query, Args, ID } from '@nestjs/graphql';
+import { Resolver, Query, Args } from '@nestjs/graphql';
 import { TaggedPostsService } from '../tagged-posts.service';
 import { TaggedPostModel } from '../dto/tagged-post.model';
+import { GetTaggedPostInput } from '../dto/get-tagged-post.dto';
 
 @Resolver(() => TaggedPostModel)
 export class TaggedPostsQueriesResolver {
@@ -12,7 +13,10 @@ export class TaggedPostsQueriesResolver {
   }
 
   @Query(() => TaggedPostModel, { name: 'taggedPost' })
-  findOne(@Args('id', { type: () => ID }) id: string) {
-    return this.taggedPostsService.findOne(id);
+  findOne(
+    @Args('getTaggedPostInput')
+    getTaggedPostInput: GetTaggedPostInput,
+  ) {
+    return this.taggedPostsService.findOne(getTaggedPostInput);
   }
 }

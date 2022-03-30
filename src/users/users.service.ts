@@ -8,6 +8,7 @@ import { User } from './entities/user.entity';
 import { SignUpUserInput } from './dto/sign-up.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
+import { GetUserInput } from './dto/get-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -16,15 +17,13 @@ export class UsersService {
   findAll() {
     return this.usersRepository.find();
   }
+  async findOne(getUserInput: GetUserInput) {
+    const user = await this.usersRepository.findOne(getUserInput.id);
 
-  async findOne(id: string) {
-    const user = await this.usersRepository.findOne(id);
-
-    if (!user) throw new NotFoundException(`User ${id} not found`);
+    if (!user) throw new NotFoundException(`User ${getUserInput.id} not found`);
 
     return user;
   }
-
   async remove(id: string) {
     const user = await this.usersRepository.findOne(id);
 

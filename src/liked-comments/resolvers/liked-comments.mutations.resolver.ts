@@ -1,8 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { CreateLikedCommentInput } from '../dto/create-liked-comment.input';
+import { GetLikedCommentInput } from '../dto/get-liked-comment.dto';
 import { LikedCommentModel } from '../dto/liked-comment.model';
 import { EditLikedCommentsGuard } from '../edit-liked-comments.guard';
 import { LikedCommentsService } from '../liked-comments.service';
@@ -13,8 +14,8 @@ export class LikedCommentsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard)
   @Mutation(() => LikedCommentModel)
-  createLikedComment(
-    @Args('createLikedCommentInput')
+  addCommentToLikes(
+    @Args('addCommentToLikesInput')
     createLikedCommentInput: CreateLikedCommentInput,
     @CurrentUser() user,
   ) {
@@ -23,7 +24,10 @@ export class LikedCommentsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard, EditLikedCommentsGuard)
   @Mutation(() => LikedCommentModel)
-  removeLikedComment(@Args('id', { type: () => ID }) id: string) {
-    return this.likedCommentsService.remove(id);
+  removeCommentFromLikes(
+    @Args('getLikedCommentInput')
+    getLikedCommentInput: GetLikedCommentInput,
+  ) {
+    return this.likedCommentsService.remove(getLikedCommentInput);
   }
 }

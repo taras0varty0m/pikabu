@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { CommentsRepository } from './comments.repository';
-import { CommentSort } from './dto/comment-sort.enum';
 import { CreateCommentInput } from './dto/create-comment.input';
+import { GetCommentInput } from './dto/get-comment.dto';
+import { GetCommentsInput } from './dto/get-comments.dto';
 import { UpdateCommentInput } from './dto/update-comment.input';
 import { Comment } from './entities/comment.entity';
 
@@ -20,22 +20,17 @@ export class CommentsService {
     return this.commentsRepository.find();
   }
 
-  async findWithPaginate(
-    options: IPaginationOptions,
-    userId: string,
-    sortOptions?: CommentSort[],
-  ) {
+  async findWithPaginate(getCommentsInput: GetCommentsInput) {
     return this.commentsRepository.getAllWithPaginationOptionsByUserId(
-      options,
-      userId,
-      sortOptions,
+      getCommentsInput,
     );
   }
 
-  async findOne(id: string) {
-    const comment = await this.commentsRepository.findOne(id);
+  async findOne(getCommentInput: GetCommentInput) {
+    const comment = await this.commentsRepository.findOne(getCommentInput.id);
 
-    if (!comment) throw new NotFoundException(`Comment ${id} not found`);
+    if (!comment)
+      throw new NotFoundException(`Comment ${getCommentInput.id} not found`);
 
     return comment;
   }
@@ -51,17 +46,12 @@ export class CommentsService {
     return await comment.save();
   }
 
-  async remove(id: string) {
-    const comment = await this.commentsRepository.findOne(id);
+  async remove(getCommentInput: GetCommentInput) {
+    const comment = await this.commentsRepository.findOne(getCommentInput.id);
 
-    if (!comment) throw new NotFoundException(`Comment not found`);
+    if (!comment)
+      throw new NotFoundException(`Comment ${getCommentInput.id} not found`);
 
     return await this.commentsRepository.remove(comment);
-  }
-
-  findAllByPostId(postId: string, options: IPaginationOptions) {
-    return paginate<Comment>(this.commentsRepository, options, {
-      postId,
-    });
   }
 }

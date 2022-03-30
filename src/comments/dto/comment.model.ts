@@ -13,7 +13,7 @@ export class CommentModel {
   postId: string;
 
   @Field(() => [String])
-  images?: string[];
+  images: string[];
 
   @Field(() => ID)
   userId: string;
@@ -24,10 +24,10 @@ export class CommentModel {
   @Field(() => Date)
   updatedAt: Date;
 
-  @Field(() => Int, { defaultValue: 0, nullable: true })
+  @Field(() => Int, { nullable: true })
   likes?: number;
 
-  @Field(() => Int, { defaultValue: 0, nullable: true })
+  @Field(() => Int, { nullable: true })
   disLikes?: number;
 
   @Field(() => [LikedCommentModel])

@@ -1,5 +1,5 @@
 import { InputType, Field } from '@nestjs/graphql';
-import { IsDefined, IsNotEmpty, IsString } from 'class-validator';
+import { IsDefined, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 @InputType()
 export class CreatePostInput {
@@ -15,6 +15,10 @@ export class CreatePostInput {
   @IsDefined()
   content: string;
 
-  @Field(() => [String], { nullable: true })
-  images: string[];
+  @IsString({ each: true })
+  @IsNotEmpty({ each: true })
+  @IsDefined({ each: true })
+  @MaxLength(50, { each: true })
+  @Field(() => [String], { defaultValue: [] })
+  images?: string[];
 }

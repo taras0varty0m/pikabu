@@ -28,7 +28,7 @@ export class Comment extends BaseEntity {
   postId: string;
 
   @Column('text', { array: true, default: [] })
-  images?: string[];
+  images: string[];
 
   @ManyToOne(() => User, (user) => user.comments, { onDelete: 'CASCADE' })
   user?: User;

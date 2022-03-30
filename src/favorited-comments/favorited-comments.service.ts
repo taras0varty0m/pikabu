@@ -1,6 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
-import { CreateFavoritedCommentInput } from './dto/create-favorited-comment.input';
+import { paginate } from 'nestjs-typeorm-paginate';
+import { AddCommentToFavoritesInput } from './dto/create-favorited-comment.input';
+import { GetFavoritedCommentInput } from './dto/get-favorited-comment.dto';
+import { GetWithPaginateByUserIdInput } from '../common/get-with-paginate-by-user-id.dto';
 import { FavoritedComment } from './entities/favorited-comment.entity';
 import { FavoritedCommentsRepository } from './favorited-comments.repository';
 
@@ -10,7 +12,7 @@ export class FavoritedCommentsService {
     private favoritedCommentsRepository: FavoritedCommentsRepository,
   ) {}
   async create(
-    createFavoritedCommentInput: CreateFavoritedCommentInput,
+    createFavoritedCommentInput: AddCommentToFavoritesInput,
     userId: string,
   ) {
     const favoritedComment = FavoritedComment.create({
@@ -21,33 +23,43 @@ export class FavoritedCommentsService {
     return await favoritedComment.save();
   }
 
-  async findWithPaginate(options: IPaginationOptions, userId: string) {
+  async findWithPaginate(
+    getWithPaginateByUserIdInput: GetWithPaginateByUserIdInput,
+  ) {
     return paginate<FavoritedComment>(
       this.favoritedCommentsRepository,
-      options,
+      getWithPaginateByUserIdInput.paginateOptions,
       {
         order: {
           id: 'DESC',
         },
-        userId,
+        userId: getWithPaginateByUserIdInput.userId,
       },
     );
   }
 
-  async findOne(id: string) {
-    const favoritedComment = await this.favoritedCommentsRepository.findOne(id);
+  async findOne(getFavoritedCommentInput: GetFavoritedCommentInput) {
+    const favoritedComment = await this.favoritedCommentsRepository.findOne({
+      ...getFavoritedCommentInput,
+    });
 
     if (!favoritedComment)
-      throw new NotFoundException(`FavoritedComment ${id} not found`);
+      throw new NotFoundException(
+        `FavoritedComment ${getFavoritedCommentInput.id} not found`,
+      );
 
     return favoritedComment;
   }
 
-  async remove(id: string) {
-    const favoritedComment = await this.favoritedCommentsRepository.findOne(id);
+  async remove(getFavoritedCommentInput: GetFavoritedCommentInput) {
+    const favoritedComment = await this.favoritedCommentsRepository.findOne({
+      ...getFavoritedCommentInput,
+    });
 
     if (!favoritedComment)
-      throw new NotFoundException(`FavoritedComment not found`);
+      throw new NotFoundException(
+        `FavoritedComment ${getFavoritedCommentInput.id} not found`,
+      );
 
     return await this.favoritedCommentsRepository.remove(favoritedComment);
   }

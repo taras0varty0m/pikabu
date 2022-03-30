@@ -1,9 +1,10 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
-import { CreateFavoritedCommentInput } from '../dto/create-favorited-comment.input';
+import { AddCommentToFavoritesInput } from '../dto/create-favorited-comment.input';
 import { FavoritedCommentModel } from '../dto/favorited-comment.model';
+import { GetFavoritedCommentInput } from '../dto/get-favorited-comment.dto';
 import { EditFavoritedCommentsGuard } from '../edit-favorited-comments.guard';
 import { FavoritedCommentsService } from '../favorited-comments.service';
 
@@ -15,20 +16,23 @@ export class FavoritedCommentsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard)
   @Mutation(() => FavoritedCommentModel)
-  createFavoritedComment(
-    @Args('createFavoritedCommentInput')
-    createFavoritedCommentInput: CreateFavoritedCommentInput,
+  addCommentToFavorites(
+    @Args('addCommentToFavoritesInput')
+    addCommentToFavoritesInput: AddCommentToFavoritesInput,
     @CurrentUser() user,
   ) {
     return this.favoritedCommentsService.create(
-      createFavoritedCommentInput,
+      addCommentToFavoritesInput,
       user.id,
     );
   }
 
   @UseGuards(GraphqlJwtAuthGuard, EditFavoritedCommentsGuard)
   @Mutation(() => FavoritedCommentModel)
-  removeFavoritedComment(@Args('id', { type: () => ID }) id: string) {
-    return this.favoritedCommentsService.remove(id);
+  removeCommentFromFavorites(
+    @Args('getFavoritedCommentInput')
+    getFavoritedCommentInput: GetFavoritedCommentInput,
+  ) {
+    return this.favoritedCommentsService.remove(getFavoritedCommentInput);
   }
 }

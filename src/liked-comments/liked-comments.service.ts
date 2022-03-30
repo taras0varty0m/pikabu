@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateLikedCommentInput } from './dto/create-liked-comment.input';
+import { GetLikedCommentInput } from './dto/get-liked-comment.dto';
 import { LikedComment } from './entities/liked-comment.entity';
 import { LikedCommentsRepository } from './liked-comments.repository';
 
@@ -22,19 +23,28 @@ export class LikedCommentsService {
     return this.likedCommentsRepository.find();
   }
 
-  async findOne(id: string) {
-    const likedComment = await this.likedCommentsRepository.findOne(id);
+  async findOne(getLikedCommentInput: GetLikedCommentInput) {
+    const likedComment = await this.likedCommentsRepository.findOne(
+      getLikedCommentInput.id,
+    );
 
     if (!likedComment)
-      throw new NotFoundException(`LikedComment ${id} not found`);
+      throw new NotFoundException(
+        `LikedComment ${getLikedCommentInput.id} not found`,
+      );
 
     return likedComment;
   }
 
-  async remove(id: string) {
-    const likedComment = await this.likedCommentsRepository.findOne(id);
+  async remove(getLikedCommentInput: GetLikedCommentInput) {
+    const likedComment = await this.likedCommentsRepository.findOne(
+      getLikedCommentInput.id,
+    );
 
-    if (!likedComment) throw new NotFoundException(`LikedComment not found`);
+    if (!likedComment)
+      throw new NotFoundException(
+        `LikedComment ${getLikedCommentInput.id} not found`,
+      );
 
     return await this.likedCommentsRepository.remove(likedComment);
   }

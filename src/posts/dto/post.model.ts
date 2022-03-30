@@ -22,10 +22,13 @@ export class PostModel {
   @Field(() => Date)
   updatedAt: Date;
 
-  @Field(() => Int, { defaultValue: 0, nullable: true })
+  @Field(() => [String])
+  images: string[];
+
+  @Field(() => Int, { nullable: true })
   likes?: number;
 
-  @Field(() => Int, { defaultValue: 0, nullable: true })
+  @Field(() => Int, { nullable: true })
   disLikes?: number;
 
   @Field(() => [CommentModel])

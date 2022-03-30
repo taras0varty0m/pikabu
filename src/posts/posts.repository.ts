@@ -1,6 +1,8 @@
 import { IPaginationOptions, paginate } from 'nestjs-typeorm-paginate';
 import { Repository } from 'typeorm';
 import { EntityRepository } from 'typeorm/decorator/EntityRepository';
+import { GetPostInput } from './dto/get-post.dto';
+import { GetPostsInput } from './dto/get-posts.dto';
 import { PostFilter, PostGroup } from './dto/post-filter.input';
 import { PostSort } from './dto/post-sort.enum';
 import { Post } from './entities/post.entity';
@@ -13,12 +15,14 @@ export class PostsRepository extends Repository<Post> {
       .getMany();
   }
 
-  getAllWithPaginationOptions(
-    options: IPaginationOptions,
-    sortOptions?: PostSort[],
-    postFiler?: PostFilter,
-    search?: string,
-  ) {
+  getAllWithPaginationOptions(getPostsInput: GetPostsInput) {
+    const {
+      sortOptions,
+      paginateOptions: options,
+      search,
+      filterOptions: postFiler,
+    } = getPostsInput;
+
     const queryBuilder = this.createQueryBuilder('posts').leftJoin(
       'posts.taggedPosts',
       'tags',

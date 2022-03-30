@@ -1,9 +1,10 @@
 import { UseGuards } from '@nestjs/common';
-import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { CreateFavoritedPostInput } from '../dto/create-favorited-post.input';
 import { FavoritedPostModel } from '../dto/favorited-post.model';
+import { GetFavoritedPostInput } from '../dto/get-favorited-post.dto';
 import { EditFavoritedPostsGuard } from '../edit-favorited-posts.guard';
 import { FavoritedPostsService } from '../favorited-posts.service';
 
@@ -13,7 +14,7 @@ export class FavoritedPostsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard)
   @Mutation(() => FavoritedPostModel)
-  createFavoritedPost(
+  addPostToFavorites(
     @Args('createFavoritedPostInput')
     createFavoritedPostInput: CreateFavoritedPostInput,
     @CurrentUser() user,
@@ -22,7 +23,10 @@ export class FavoritedPostsMutationsResolver {
   }
   @UseGuards(GraphqlJwtAuthGuard, EditFavoritedPostsGuard)
   @Mutation(() => FavoritedPostModel)
-  removeFavoritedPost(@Args('id', { type: () => ID }) id: string) {
-    return this.favoritedPostsService.remove(id);
+  removePostFromFavorites(
+    @Args('getFavoritedPostInput')
+    getFavoritedPostInput: GetFavoritedPostInput,
+  ) {
+    return this.favoritedPostsService.remove(getFavoritedPostInput);
   }
 }

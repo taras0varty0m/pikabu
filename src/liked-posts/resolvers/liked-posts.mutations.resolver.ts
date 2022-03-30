@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
+import { Resolver, Mutation, Args } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
 import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
@@ -6,6 +6,7 @@ import { CreateLikedPostInput } from '../dto/create-liked-post.input';
 import { LikedPostModel } from '../dto/liked-post.model';
 import { EditLikedPostsGuard } from '../edit-liked-posts.guard';
 import { LikedPostsService } from '../liked-posts.service';
+import { GetLikedPostInput } from '../dto/get-liked-post.dto';
 
 @Resolver(() => LikedPostModel)
 export class LikedPostsMutationsResolver {
@@ -13,8 +14,8 @@ export class LikedPostsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard)
   @Mutation(() => LikedPostModel)
-  createLikedPost(
-    @Args('createLikedPostInput') createLikedPostInput: CreateLikedPostInput,
+  addPostToLikes(
+    @Args('addPostToLikesInput') createLikedPostInput: CreateLikedPostInput,
     @CurrentUser() user,
   ) {
     return this.likedPostsService.create(createLikedPostInput, user.id);
@@ -22,7 +23,10 @@ export class LikedPostsMutationsResolver {
 
   @UseGuards(GraphqlJwtAuthGuard, EditLikedPostsGuard)
   @Mutation(() => LikedPostModel)
-  removeLikedPost(@Args('id', { type: () => ID }) id: string) {
-    return this.likedPostsService.remove(id);
+  removePostFromLikes(
+    @Args('getLikedPostInput')
+    getLikedPostInput: GetLikedPostInput,
+  ) {
+    return this.likedPostsService.remove(getLikedPostInput);
   }
 }

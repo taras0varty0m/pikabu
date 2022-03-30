@@ -43,7 +43,7 @@ export class Post extends BaseEntity {
   comments?: Comment[];
 
   @Column('text', { array: true, default: [] })
-  images?: string[];
+  images: string[];
 
   @OneToMany(() => TaggedPost, (taggedPost) => taggedPost.post, {
     cascade: true,

@@ -1,4 +1,5 @@
-import { Resolver, Query, Args, ID } from '@nestjs/graphql';
+import { Resolver, Query, Args } from '@nestjs/graphql';
+import { GetLikedPostInput } from '../dto/get-liked-post.dto';
 import { LikedPostModel } from '../dto/liked-post.model';
 import { LikedPostsService } from '../liked-posts.service';
 
@@ -12,7 +13,10 @@ export class LikedPostsQueriesResolver {
   }
 
   @Query(() => LikedPostModel, { name: 'likedPost' })
-  findOne(@Args('id', { type: () => ID }) id: string) {
-    return this.likedPostsService.findOne(id);
+  findOne(
+    @Args('getLikedPostInput')
+    getLikedPostInput: GetLikedPostInput,
+  ) {
+    return this.likedPostsService.findOne(getLikedPostInput);
   }
 }
