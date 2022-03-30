@@ -1,13 +1,9 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import { IsDefined, ValidateNested } from 'class-validator';
-import { PaginateInput } from 'src/common/paginate.input';
+import { IsDefined } from 'class-validator';
+import { GetWithPaginate } from './get-with-paginate.dto';
 
 @InputType()
-export class GetWithPaginateByUserIdInput {
-  @Field(() => PaginateInput, { defaultValue: PaginateInput })
-  @ValidateNested()
-  paginateOptions?: PaginateInput;
-
+export class GetWithPaginateByUserIdInput extends GetWithPaginate {
   @Field(() => ID)
   @IsDefined()
   userId: string;

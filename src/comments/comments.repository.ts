@@ -20,7 +20,7 @@ export class CommentsRepository extends Repository<Comment> {
       sortOptions,
       paginateOptions: options,
       userId,
-    } = getCommentWithPaginateAndFilterByUserIdInput;
+    } = { ...getCommentWithPaginateAndFilterByUserIdInput };
 
     const queryBuilder = this.createQueryBuilder('comments');
 

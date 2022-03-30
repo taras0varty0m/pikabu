@@ -15,22 +15,9 @@ class Meta {
   currentPage: number;
 }
 
-@ObjectType()
-class Links {
-  @Field()
-  first: string;
-  @Field()
-  previous: string;
-  @Field()
-  next: string;
-  @Field()
-  last: string;
-}
-
 export interface IPaginated<T> {
   items: T[];
   meta: Meta;
-  links: Links;
 }
 
 export const Paginated = <T>(classRef: Type<T>): Type<IPaginated<T>> => {
@@ -41,9 +28,6 @@ export const Paginated = <T>(classRef: Type<T>): Type<IPaginated<T>> => {
 
     @Field()
     meta: Meta;
-
-    @Field()
-    links: Links;
   }
 
   return PaginatedType;
