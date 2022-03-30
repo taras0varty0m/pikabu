@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { PostsRepository } from 'src/posts/posts.repository';
 import { NestDataLoader } from 'src/libs/NestDataloader';
-import { PostModel } from './dto/post.model';
+import { PostModel } from '../dto/post.model';
 
 @Injectable()
 export class PostDataLoader implements NestDataLoader<string, PostModel[]> {

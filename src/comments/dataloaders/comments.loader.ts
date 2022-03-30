@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { CommentsRepository } from 'src/comments/comments.repository';
 import { NestDataLoader } from 'src/libs/NestDataloader';
-import { CommentModel } from './dto/comment.model';
+import { CommentModel } from '../dto/comment.model';
 
 @Injectable()
 export class CommentDataLoader

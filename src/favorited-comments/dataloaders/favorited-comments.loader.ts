@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { FavoritedCommentsRepository } from 'src/favorited-comments/favorited-comments.repository';
 import { NestDataLoader } from 'src/libs/NestDataloader';
-import { FavoritedCommentModel } from './dto/favorited-comment.model';
+import { FavoritedCommentModel } from '../dto/favorited-comment.model';
 
 @Injectable()
 export class FavoritedCommentDataLoader

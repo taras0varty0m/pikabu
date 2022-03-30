@@ -1,12 +1,12 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserModel } from '../dto/user.model';
 import { PostModel } from 'src/posts/dto/post.model';
-import { FavoritedPostDataLoader } from 'src/favorited-posts/favorited-posts.loader';
+import { FavoritedPostDataLoader } from 'src/favorited-posts/dataloaders/favorited-posts.loader';
 import { Loader } from 'src/libs/NestDataloader';
 import { FavoritedPostModel } from 'src/favorited-posts/dto/favorited-post.model';
 import { FavoritedCommentModel } from 'src/favorited-comments/dto/favorited-comment.model';
-import { FavoritedCommentDataLoader } from 'src/favorited-comments/favorited-comments.loader';
-import { PostDataLoader } from 'src/posts/posts.loader';
+import { FavoritedCommentDataLoader } from 'src/favorited-comments/dataloaders/favorited-comments.loader';
+import { PostDataLoader } from 'src/posts/dataloaders/posts.loader';
 
 @Resolver(() => UserModel)
 export class UsersFieldsResolver {

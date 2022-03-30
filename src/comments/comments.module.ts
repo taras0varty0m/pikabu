@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CommentsRepository } from './comments.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CommentDataLoader } from './comments.loader';
+import { CommentDataLoader } from './dataloaders/comments.loader';
 import { CommentsQueriesResolver } from './resolvers/comments.queries.resolver';
 import { CommentsMutationsResolver } from './resolvers/comments.mutations.resolver';
 import { CommentsFieldsResolver } from './resolvers/comments.fields.resolver';

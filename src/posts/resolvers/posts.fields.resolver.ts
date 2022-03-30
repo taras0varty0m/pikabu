@@ -1,10 +1,10 @@
 import { Resolver, Parent, ResolveField, Int } from '@nestjs/graphql';
 import { PostModel } from '../dto/post.model';
 import { LikedPostModel } from 'src/liked-posts/dto/liked-post.model';
-import { LikedPostDataLoader } from 'src/liked-posts/liked-posts.loader';
+import { LikedPostDataLoader } from 'src/liked-posts/dataloaders/liked-posts.loader';
 import { Loader } from 'src/libs/NestDataloader';
 import { CommentModel } from 'src/comments/dto/comment.model';
-import { CommentDataLoader } from 'src/comments/comments.loader';
+import { CommentDataLoader } from 'src/comments/dataloaders/comments.loader';
 import { LikedPostsRepository } from 'src/liked-posts/liked-posts.repository';
 
 @Resolver(() => PostModel)

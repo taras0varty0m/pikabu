@@ -16,18 +16,18 @@ import { FavoritedCommentsModule } from './favorited-comments/favorited-comments
 import { FavoritedPostsModule } from './favorited-posts/favorited-posts.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from './libs/NestDataloader';
-import { FavoritedPostDataLoader } from './favorited-posts/favorited-posts.loader';
+import { FavoritedPostDataLoader } from './favorited-posts/dataloaders/favorited-posts.loader';
 import { FavoritedPostsRepository } from './favorited-posts/favorited-posts.repository';
-import { FavoritedCommentDataLoader } from './favorited-comments/favorited-comments.loader';
+import { FavoritedCommentDataLoader } from './favorited-comments/dataloaders/favorited-comments.loader';
 import { FavoritedCommentsRepository } from './favorited-comments/favorited-comments.repository';
-import { PostDataLoader } from './posts/posts.loader';
+import { PostDataLoader } from './posts/dataloaders/posts.loader';
 import { PostsRepository } from './posts/posts.repository';
-import { LikedPostDataLoader } from './liked-posts/liked-posts.loader';
+import { LikedPostDataLoader } from './liked-posts/dataloaders/liked-posts.loader';
 import { LikedPostsRepository } from './liked-posts/liked-posts.repository';
 import { LikedCommentsRepository } from './liked-comments/liked-comments.repository';
-import { LikedCommentDataLoader } from './liked-comments/liked-comments.loader';
+import { LikedCommentDataLoader } from './liked-comments/dataloaders/liked-comments.loader';
 import { CommentsRepository } from './comments/comments.repository';
-import { CommentDataLoader } from './comments/comments.loader';
+import { CommentDataLoader } from './comments/dataloaders/comments.loader';
 
 @Module({
   imports: [
