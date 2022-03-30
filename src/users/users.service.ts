@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { User } from './entities/user.entity';
@@ -9,10 +10,33 @@ import { SignUpUserInput } from './dto/sign-up.input';
 import { UpdateUserInput } from './dto/update-user.input';
 import { UsersRepository } from './users.repository';
 import { GetUserInput } from './dto/get-user.dto';
+import { AuthService } from 'src/auth/auth.service';
+import { ResponseSignInUserDto } from 'src/auth/dto/response-login-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private usersRepository: UsersRepository) {}
+  constructor(
+    private usersRepository: UsersRepository,
+    private authService: AuthService,
+  ) {}
+
+  async login({ email }): Promise<ResponseSignInUserDto> {
+    const user = await this.usersRepository.findByEmail(email);
+
+    if (!user) {
+      throw new UnauthorizedException();
+    }
+
+    const payload = {
+      userId: user.id,
+      email: user.email,
+    };
+
+    return {
+      access_token: await this.authService.signPayload(payload),
+      user,
+    };
+  }
 
   findAll() {
     return this.usersRepository.find();

@@ -2,17 +2,17 @@ import { Resolver, Parent, ResolveField, Int } from '@nestjs/graphql';
 import { Loader } from 'src/libs/NestDataloader';
 import { LikedCommentModel } from 'src/liked-comments/dto/liked-comment.model';
 import { LikedCommentDataLoader } from 'src/liked-comments/dataloaders/liked-comments.loader';
-import { LikedCommentsRepository } from 'src/liked-comments/liked-comments.repository';
 import { CommentModel } from '../dto/comment.model';
 import { PostModel } from 'src/posts/dto/post.model';
 import { UserModel } from 'src/users/dto/user.model';
 import { PostsRepository } from 'src/posts/posts.repository';
 import { UsersRepository } from 'src/users/users.repository';
+import { CommentLikesDataLoader } from '../dataloaders/comment-likes.loader';
+import { CommentDisLikesDataLoader } from '../dataloaders/comment-dislikes.loader';
 
 @Resolver(() => CommentModel)
 export class CommentsFieldsResolver {
   constructor(
-    private readonly likedCommentsRepository: LikedCommentsRepository,
     private readonly postsRepository: PostsRepository,
     private readonly usersRepository: UsersRepository,
   ) {}
@@ -31,13 +31,29 @@ export class CommentsFieldsResolver {
   }
 
   @ResolveField(() => Int)
-  likes(@Parent() comment: CommentModel) {
-    return this.likedCommentsRepository.getLikesByCommentId(comment.id);
+  async likes(
+    @Parent() { id, likes }: CommentModel,
+    @Loader(CommentLikesDataLoader.name)
+    commentLikesDataLoader: ReturnType<
+      CommentLikesDataLoader['generateDataLoader']
+    >,
+  ) {
+    if (likes) return likes;
+
+    return (await commentLikesDataLoader.load(id)).length;
   }
 
   @ResolveField(() => Int)
-  disLikes(@Parent() comment: CommentModel) {
-    return this.likedCommentsRepository.getDisLikesByCommentId(comment.id);
+  async disLikes(
+    @Parent() { id, likes }: CommentModel,
+    @Loader(CommentDisLikesDataLoader.name)
+    commentDisLikesDataLoader: ReturnType<
+      CommentDisLikesDataLoader['generateDataLoader']
+    >,
+  ) {
+    if (likes) return likes;
+
+    return (await commentDisLikesDataLoader.load(id)).length;
   }
 
   @ResolveField(() => PostModel)

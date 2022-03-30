@@ -28,6 +28,8 @@ import { LikedCommentsRepository } from './liked-comments/liked-comments.reposit
 import { LikedCommentDataLoader } from './liked-comments/dataloaders/liked-comments.loader';
 import { CommentsRepository } from './comments/comments.repository';
 import { CommentDataLoader } from './comments/dataloaders/comments.loader';
+import { CommentDisLikesDataLoader } from './comments/dataloaders/comment-dislikes.loader';
+import { CommentLikesDataLoader } from './comments/dataloaders/comment-likes.loader';
 
 @Module({
   imports: [
@@ -109,6 +111,14 @@ import { CommentDataLoader } from './comments/dataloaders/comments.loader';
     {
       provide: CommentDataLoader.name,
       useClass: CommentDataLoader,
+    },
+    {
+      provide: CommentDisLikesDataLoader.name,
+      useClass: CommentDisLikesDataLoader,
+    },
+    {
+      provide: CommentLikesDataLoader.name,
+      useClass: CommentLikesDataLoader,
     },
   ],
 })

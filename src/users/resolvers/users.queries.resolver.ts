@@ -19,7 +19,7 @@ export class UsersQueriesResolver {
 
   @Query(() => ResponseSignInUserDto)
   login(@Args('signInUserInput') signInUserInput: SignInUserInput) {
-    return this.authService.login(signInUserInput);
+    return this.usersService.login(signInUserInput);
   }
 
   @Query(() => UserModel, { name: 'user' })

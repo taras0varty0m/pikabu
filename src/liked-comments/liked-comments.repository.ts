@@ -1,5 +1,5 @@
 import { TypeLike } from 'src/common/type-like.enum';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { EntityRepository } from 'typeorm/decorator/EntityRepository';
 import { LikedComment } from './entities/liked-comment.entity';
 
@@ -11,11 +11,15 @@ export class LikedCommentsRepository extends Repository<LikedComment> {
       .getMany();
   }
 
-  getLikesByCommentId(commentId: string) {
-    return this.count({ where: { commentId, type: TypeLike.LIKE } });
+  getLikesByCommentIds(commentIds: string[]) {
+    return this.find({
+      where: { commentId: In(commentIds), type: TypeLike.LIKE },
+    });
   }
 
-  getDisLikesByCommentId(commentId: string) {
-    return this.count({ where: { commentId, type: TypeLike.DISLIKE } });
+  getDisLikesByCommentIds(commentIds: string[]) {
+    return this.find({
+      where: { commentId: In(commentIds), type: TypeLike.DISLIKE },
+    });
   }
 }
