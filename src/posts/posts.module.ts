@@ -7,6 +7,7 @@ import { PostsMutationsResolver } from './resolvers/posts.mutations.resolver';
 import { PostsFieldsResolver } from './resolvers/posts.fields.resolver';
 import { LikedPostsRepository } from 'src/liked-posts/liked-posts.repository';
 import { CommentsRepository } from 'src/comments/comments.repository';
+import { UsersRepository } from 'src/users/users.repository';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CommentsRepository } from 'src/comments/comments.repository';
       PostsRepository,
       LikedPostsRepository,
       CommentsRepository,
+      UsersRepository,
     ]),
   ],
   providers: [

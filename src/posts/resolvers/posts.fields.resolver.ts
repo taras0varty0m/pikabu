@@ -6,10 +6,20 @@ import { Loader } from 'src/libs/NestDataloader';
 import { CommentModel } from 'src/comments/dto/comment.model';
 import { CommentDataLoader } from 'src/comments/dataloaders/comments.loader';
 import { LikedPostsRepository } from 'src/liked-posts/liked-posts.repository';
+import { UsersRepository } from 'src/users/users.repository';
+import { UserModel } from 'src/users/dto/user.model';
 
 @Resolver(() => PostModel)
 export class PostsFieldsResolver {
-  constructor(private readonly likedPostsRepository: LikedPostsRepository) {}
+  constructor(
+    private readonly likedPostsRepository: LikedPostsRepository,
+    private readonly usersRepository: UsersRepository,
+  ) {}
+
+  @ResolveField(() => UserModel)
+  user(@Parent() post: PostModel) {
+    return this.usersRepository.findOne(post.userId);
+  }
 
   @ResolveField(() => [LikedPostModel])
   async likedPosts(

@@ -1,6 +1,7 @@
 import { ObjectType, Field, ID, Int } from '@nestjs/graphql';
 import { CommentModel } from 'src/comments/dto/comment.model';
 import { LikedPostModel } from 'src/liked-posts/dto/liked-post.model';
+import { UserModel } from 'src/users/dto/user.model';
 
 @ObjectType()
 export class PostModel {
@@ -12,6 +13,9 @@ export class PostModel {
 
   @Field(() => String)
   content: string;
+
+  @Field(() => UserModel)
+  user?: UserModel;
 
   @Field(() => ID)
   userId: string;

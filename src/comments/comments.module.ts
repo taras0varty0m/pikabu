@@ -7,6 +7,8 @@ import { CommentsMutationsResolver } from './resolvers/comments.mutations.resolv
 import { CommentsFieldsResolver } from './resolvers/comments.fields.resolver';
 import { LikedCommentsRepository } from 'src/liked-comments/liked-comments.repository';
 import { FavoritedCommentsRepository } from 'src/favorited-comments/favorited-comments.repository';
+import { PostsRepository } from 'src/posts/posts.repository';
+import { UsersRepository } from 'src/users/users.repository';
 
 @Module({
   imports: [
@@ -14,6 +16,8 @@ import { FavoritedCommentsRepository } from 'src/favorited-comments/favorited-co
       CommentsRepository,
       LikedCommentsRepository,
       FavoritedCommentsRepository,
+      PostsRepository,
+      UsersRepository,
     ]),
   ],
   providers: [
