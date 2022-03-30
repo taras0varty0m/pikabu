@@ -1,7 +1,7 @@
 import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { UseGuards } from '@nestjs/common';
-import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
+import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { CommentsService } from '../comments.service';
 import { CommentModel } from '../dto/comment.model';
 import { CreateCommentInput } from '../dto/create-comment.input';

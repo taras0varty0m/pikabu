@@ -1,6 +1,6 @@
 import { UseGuards } from '@nestjs/common';
 import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
-import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
+import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { CreateFavoritedCommentInput } from '../dto/create-favorited-comment.input';
 import { FavoritedCommentModel } from '../dto/favorited-comment.model';

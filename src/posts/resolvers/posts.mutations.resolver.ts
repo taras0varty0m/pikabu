@@ -3,7 +3,7 @@ import { PostsService } from '../posts.service';
 import { CreatePostInput } from '../dto/create-post.input';
 import { UpdatePostInput } from '../dto/update-post.input';
 import { UseGuards } from '@nestjs/common';
-import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
+import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { EditPostsGuard } from '../edit-posts.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { PostModel } from '../dto/post.model';

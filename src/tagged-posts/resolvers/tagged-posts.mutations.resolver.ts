@@ -2,7 +2,7 @@ import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { TaggedPostsService } from '../tagged-posts.service';
 import { CreateTaggedPostInput } from '../dto/create-tagged-post.input';
 import { UseGuards } from '@nestjs/common';
-import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
+import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { EditTaggedPostsGuard } from '../edit-tagged-posts.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { TaggedPostModel } from '../dto/tagged-post.model';

@@ -1,6 +1,6 @@
 import { Resolver, Mutation, Args, ID } from '@nestjs/graphql';
 import { UseGuards } from '@nestjs/common';
-import { GraphqlJwtAuthGuard } from 'src/auth/graphql-jwt-auth.guard';
+import { GraphqlJwtAuthGuard } from 'src/auth/guards/graphql-jwt-auth.guard';
 import { CurrentUser } from 'src/users/entities/user.decorator';
 import { CreateLikedPostInput } from '../dto/create-liked-post.input';
 import { LikedPostModel } from '../dto/liked-post.model';
