@@ -17,6 +17,7 @@ export class FavoritedCommentsService {
       ...createFavoritedCommentInput,
       userId,
     });
+
     return await favoritedComment.save();
   }
 
@@ -35,15 +36,19 @@ export class FavoritedCommentsService {
 
   async findOne(id: string) {
     const favoritedComment = await this.favoritedCommentsRepository.findOne(id);
+
     if (!favoritedComment)
       throw new NotFoundException(`FavoritedComment ${id} not found`);
+
     return favoritedComment;
   }
 
   async remove(id: string) {
     const favoritedComment = await this.favoritedCommentsRepository.findOne(id);
+
     if (!favoritedComment)
       throw new NotFoundException(`FavoritedComment not found`);
+
     return await this.favoritedCommentsRepository.remove(favoritedComment);
   }
 

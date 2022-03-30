@@ -20,6 +20,7 @@ export class CommentsFieldsResolver {
     >,
   ) {
     if (likedComments) return likedComments;
+
     return await likedCommentDataLoader.load(id);
   }
 

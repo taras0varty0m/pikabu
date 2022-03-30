@@ -35,8 +35,10 @@ export class CommentsRepository extends Repository<Comment> {
         else queryBuilder.addOrderBy(`comments.${field}`, order);
       });
     }
+
     return paginate<Comment>(queryBuilder, options);
   }
+
   private getOrderCondition(sortOption: CommentSort): OrderConditionType {
     return CommentSort[sortOption].toString().split('_') as OrderConditionType;
   }

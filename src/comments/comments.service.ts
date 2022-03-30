@@ -12,6 +12,7 @@ export class CommentsService {
 
   async create(createCommentInput: CreateCommentInput, userId: string) {
     const comment = Comment.create({ ...createCommentInput, userId });
+
     return await comment.save();
   }
 
@@ -33,7 +34,9 @@ export class CommentsService {
 
   async findOne(id: string) {
     const comment = await this.commentsRepository.findOne(id);
+
     if (!comment) throw new NotFoundException(`Comment ${id} not found`);
+
     return comment;
   }
 
@@ -42,13 +45,17 @@ export class CommentsService {
       id,
       ...updateCommentInput,
     });
+
     if (!comment) throw new NotFoundException(`Comment not found`);
+
     return await comment.save();
   }
 
   async remove(id: string) {
     const comment = await this.commentsRepository.findOne(id);
+
     if (!comment) throw new NotFoundException(`Comment not found`);
+
     return await this.commentsRepository.remove(comment);
   }
 

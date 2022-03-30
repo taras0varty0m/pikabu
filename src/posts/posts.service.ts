@@ -13,6 +13,7 @@ export class PostsService {
 
   async create(createPostInput: CreatePostInput, userId: string) {
     const post = Post.create({ ...createPostInput, userId });
+
     return await post.save();
   }
 
@@ -26,7 +27,9 @@ export class PostsService {
 
   async findOne(id: string) {
     const post = await this.postsRepository.findOne(id);
+
     if (!post) throw new NotFoundException(`Post ${id} not found`);
+
     return post;
   }
 
@@ -35,13 +38,17 @@ export class PostsService {
       id,
       ...updatePostInput,
     });
+
     if (!post) throw new NotFoundException(`Post not found`);
+
     return await post.save();
   }
 
   async remove(id: string) {
     const post = await this.postsRepository.findOne(id);
+
     if (!post) throw new NotFoundException(`Post not found`);
+
     return await this.postsRepository.remove(post);
   }
 

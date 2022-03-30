@@ -14,6 +14,7 @@ export class LikedCommentsService {
       ...createLikedCommentInput,
       userId,
     });
+
     return await likedComment.save();
   }
 
@@ -23,14 +24,18 @@ export class LikedCommentsService {
 
   async findOne(id: string) {
     const likedComment = await this.likedCommentsRepository.findOne(id);
+
     if (!likedComment)
       throw new NotFoundException(`LikedComment ${id} not found`);
+
     return likedComment;
   }
 
   async remove(id: string) {
     const likedComment = await this.likedCommentsRepository.findOne(id);
+
     if (!likedComment) throw new NotFoundException(`LikedComment not found`);
+
     return await this.likedCommentsRepository.remove(likedComment);
   }
 }

@@ -12,6 +12,7 @@ export class PostsRepository extends Repository<Post> {
       .where('post.userId IN (:...ids)', { ids })
       .getMany();
   }
+
   getAllWithPaginationOptions(
     options: IPaginationOptions,
     sortOptions?: PostSort[],
@@ -76,6 +77,7 @@ export class PostsRepository extends Repository<Post> {
 
     return paginate<Post>(queryBuilder, options);
   }
+
   private getOrderCondition(sortOption: PostSort): OrderConditionType {
     return PostSort[sortOption].toString().split('_') as OrderConditionType;
   }

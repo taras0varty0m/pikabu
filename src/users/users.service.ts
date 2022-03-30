@@ -19,13 +19,17 @@ export class UsersService {
 
   async findOne(id: string) {
     const user = await this.usersRepository.findOne(id);
+
     if (!user) throw new NotFoundException(`User ${id} not found`);
+
     return user;
   }
 
   async remove(id: string) {
     const user = await this.usersRepository.findOne(id);
+
     if (!user) throw new NotFoundException(`User not found`);
+
     return await this.usersRepository.remove(user);
   }
 
@@ -34,6 +38,7 @@ export class UsersService {
       throw new ConflictException('User already exist');
     }
     const user = User.create(createUserInput);
+
     return await user.save();
   }
 
@@ -42,7 +47,9 @@ export class UsersService {
       id,
       ...updateUserInput,
     });
+
     if (!user) throw new NotFoundException(`User not found`);
+
     return await this.usersRepository.save(user);
   }
 }

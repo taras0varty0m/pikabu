@@ -18,6 +18,7 @@ export class PostsFieldsResolver {
     likedPostDataLoader: ReturnType<LikedPostDataLoader['generateDataLoader']>,
   ) {
     if (likedPosts) return likedPosts;
+
     return await likedPostDataLoader.load(id);
   }
 
@@ -28,6 +29,7 @@ export class PostsFieldsResolver {
     CommentDataLoader: ReturnType<CommentDataLoader['generateDataLoader']>,
   ) {
     if (comments) return comments;
+
     return await CommentDataLoader.load(id);
   }
 

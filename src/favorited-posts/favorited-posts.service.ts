@@ -15,6 +15,7 @@ export class FavoritedPostsService {
       ...createFavoritedPostInput,
       userId,
     });
+
     return await favoritedPost.save();
   }
 
@@ -29,14 +30,18 @@ export class FavoritedPostsService {
 
   async findOne(id: string) {
     const favoritedPost = await this.favoritedPostsRepository.findOne(id);
+
     if (!favoritedPost)
       throw new NotFoundException(`FavoritedPost ${id} not found`);
+
     return favoritedPost;
   }
 
   async remove(id: string) {
     const favoritedPost = await this.favoritedPostsRepository.findOne(id);
+
     if (!favoritedPost) throw new NotFoundException(`FavoritedPost not found`);
+
     return await this.favoritedPostsRepository.remove(favoritedPost);
   }
 

@@ -17,6 +17,7 @@ export class UsersFieldsResolver {
     postDataLoader: ReturnType<PostDataLoader['generateDataLoader']>,
   ) {
     if (posts) return posts;
+
     return await postDataLoader.load(id);
   }
 
@@ -29,6 +30,7 @@ export class UsersFieldsResolver {
     >,
   ) {
     if (favoritedPosts) return favoritedPosts;
+
     return await favoritedPostDataLoader.load(id);
   }
 
@@ -42,6 +44,7 @@ export class UsersFieldsResolver {
   ) {
     if (favoritedComments) return favoritedComments;
     const comments = await favoritedCommentDataLoader.load(id);
+
     return comments;
   }
 }
