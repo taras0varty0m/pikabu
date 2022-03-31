@@ -15,21 +15,12 @@ export class PostsRepository extends Repository<Post> {
       .getMany();
   }
 
-  getLikesCount(postIds: string[]) {
+  getVoteCount(postIds: string[], type: TypeLike) {
     return this.createQueryBuilder('posts')
       .leftJoin('posts.likedPosts', 'likedPosts')
-      .where('likedPosts.type = :vote', { vote: TypeLike.LIKE })
+      .where('likedPosts.type = :vote', { vote: type })
       .andWhere('likedPosts.postId IN (:...ids)', { ids: postIds })
       .loadRelationCountAndMap('posts.likedPostCount', 'posts.likedPosts')
-      .getMany();
-  }
-
-  getDisLikesCount(postIds: string[]) {
-    return this.createQueryBuilder('posts')
-      .leftJoin('posts.likedPosts', 'likedPosts')
-      .where('likedPosts.type = :vote', { vote: TypeLike.DISLIKE })
-      .andWhere('likedPosts.postId IN (:...ids)', { ids: postIds })
-      .loadRelationCountAndMap('posts.disLikedPostCount', 'posts.likedPosts')
       .getMany();
   }
 

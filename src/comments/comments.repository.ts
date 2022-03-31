@@ -14,25 +14,13 @@ export class CommentsRepository extends Repository<Comment> {
       .getMany();
   }
 
-  getLikesCount(commentIds: string[]) {
+  getVoteCount(commentIds: string[], type: TypeLike) {
     return this.createQueryBuilder('comments')
       .leftJoin('comments.likedComments', 'likedComments')
-      .where('likedComments.type = :vote', { vote: TypeLike.LIKE })
+      .where('likedComments.type = :vote', { vote: type })
       .andWhere('likedComments.commentId IN (:...ids)', { ids: commentIds })
       .loadRelationCountAndMap(
         'comments.likedCommentCount',
-        'comments.likedComments',
-      )
-      .getMany();
-  }
-
-  getDisLikesCount(commentIds: string[]) {
-    return this.createQueryBuilder('comments')
-      .leftJoin('comments.likedComments', 'likedComments')
-      .where('likedComments.type = :vote', { vote: TypeLike.DISLIKE })
-      .andWhere('likedComments.commentId IN (:...ids)', { ids: commentIds })
-      .loadRelationCountAndMap(
-        'comments.disLikedCommentCount',
         'comments.likedComments',
       )
       .getMany();

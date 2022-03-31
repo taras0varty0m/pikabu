@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
+import { TypeLike } from 'src/common/type-like.enum';
 import { NestDataLoader } from 'src/libs/NestDataloader';
 import { PostsRepository } from '../posts.repository';
 
@@ -9,8 +10,9 @@ export class PostsLikesDataLoader implements NestDataLoader<string, number[]> {
 
   generateDataLoader(): DataLoader<string, number[], string> {
     return new DataLoader(async (postIds) => {
-      const posts: any = await this.postsRepository.getLikesCount(
+      const posts: any = await this.postsRepository.getVoteCount(
         postIds as string[],
+        TypeLike.LIKE,
       );
 
       return postIds.map(
