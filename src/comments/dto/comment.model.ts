@@ -32,10 +32,10 @@ export class CommentModel {
   @Field(() => Date)
   updatedAt: Date;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int)
   likes?: number;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Int)
   disLikes?: number;
 
   @Field(() => [LikedCommentModel])
