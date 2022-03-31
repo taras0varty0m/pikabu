@@ -4,18 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FavoritedCommentsRepository } from './favorited-comments.repository';
 import { FavoritedCommentsQueriesResolver } from './resolvers/favorited-comments.queries.resolver';
 import { FavoritedCommentsMutationsResolver } from './resolvers/favorited-comments.mutations.resolver';
-import { UsersRepository } from 'src/users/users.repository';
-import { CommentsRepository } from 'src/comments/comments.repository';
 import { FavoritedCommentsFieldsResolver } from './resolvers/favorited-comments.fields.resolver';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      FavoritedCommentsRepository,
-      UsersRepository,
-      CommentsRepository,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([FavoritedCommentsRepository])],
   providers: [
     FavoritedCommentsQueriesResolver,
     FavoritedCommentsMutationsResolver,

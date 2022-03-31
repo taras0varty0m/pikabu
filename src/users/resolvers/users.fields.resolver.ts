@@ -1,32 +1,32 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
 import { UserModel } from '../dto/user.model';
 import { PostModel } from 'src/posts/dto/post.model';
-import { FavoritedPostDataLoader } from 'src/favorited-posts/dataloaders/favorited-posts.loader';
+import { UsersFavoritedPostDataLoader } from 'src/users/dataloaders/users-favorited-posts.loader';
 import { Loader } from 'src/libs/NestDataloader';
 import { FavoritedPostModel } from 'src/favorited-posts/dto/favorited-post.model';
 import { FavoritedCommentModel } from 'src/favorited-comments/dto/favorited-comment.model';
-import { FavoritedCommentDataLoader } from 'src/favorited-comments/dataloaders/favorited-comments.loader';
-import { PostDataLoader } from 'src/posts/dataloaders/posts.loader';
+import { UsersFavoritedCommentDataLoader } from 'src/users/dataloaders/users-favorited-comments.loader';
+import { UsersPostDataLoader } from '../dataloaders/users-posts.loader';
 
 @Resolver(() => UserModel)
 export class UsersFieldsResolver {
   @ResolveField(() => [PostModel])
   async posts(
     @Parent() { id, posts }: UserModel,
-    @Loader(PostDataLoader.name)
-    postDataLoader: ReturnType<PostDataLoader['generateDataLoader']>,
+    @Loader(UsersPostDataLoader.name)
+    usersPostDataLoader: ReturnType<UsersPostDataLoader['generateDataLoader']>,
   ) {
     if (posts) return posts;
 
-    return await postDataLoader.load(id);
+    return await usersPostDataLoader.load(id);
   }
 
   @ResolveField(() => [FavoritedPostModel])
   async favoritedPosts(
     @Parent() { id, favoritedPosts }: UserModel,
-    @Loader(FavoritedPostDataLoader.name)
+    @Loader(UsersFavoritedPostDataLoader.name)
     favoritedPostDataLoader: ReturnType<
-      FavoritedPostDataLoader['generateDataLoader']
+      UsersFavoritedPostDataLoader['generateDataLoader']
     >,
   ) {
     if (favoritedPosts) return favoritedPosts;
@@ -37,9 +37,9 @@ export class UsersFieldsResolver {
   @ResolveField(() => [FavoritedCommentModel])
   async favoritedComments(
     @Parent() { id, favoritedComments }: UserModel,
-    @Loader(FavoritedCommentDataLoader.name)
+    @Loader(UsersFavoritedCommentDataLoader.name)
     favoritedCommentDataLoader: ReturnType<
-      FavoritedCommentDataLoader['generateDataLoader']
+      UsersFavoritedCommentDataLoader['generateDataLoader']
     >,
   ) {
     if (favoritedComments) return favoritedComments;

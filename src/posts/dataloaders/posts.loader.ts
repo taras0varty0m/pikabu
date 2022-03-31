@@ -1,20 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
-import { PostsRepository } from 'src/posts/posts.repository';
 import { NestDataLoader } from 'src/libs/NestDataloader';
 import { PostModel } from '../dto/post.model';
+import { PostsRepository } from '../posts.repository';
 
 @Injectable()
-export class PostDataLoader implements NestDataLoader<string, PostModel[]> {
+export class PostsDataLoader implements NestDataLoader<string, PostModel> {
   constructor(private readonly postsRepository: PostsRepository) {}
 
-  generateDataLoader(): DataLoader<string, PostModel[], string> {
-    return new DataLoader(async (userIds) => {
-      const posts = await this.postsRepository.getByUserIds(
-        userIds as string[],
-      );
+  generateDataLoader(): DataLoader<string, PostModel, string> {
+    return new DataLoader(async (postIds) => {
+      const posts = await this.postsRepository.findByIds(postIds as string[]);
 
-      return userIds.map((id) => posts.filter((post) => post.userId === id));
+      return postIds.map((id) => posts.find((post) => post.id === id));
     });
   }
 }

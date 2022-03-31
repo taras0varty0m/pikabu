@@ -1,24 +1,32 @@
 import { Resolver, Parent, ResolveField } from '@nestjs/graphql';
-import { CommentsRepository } from 'src/comments/comments.repository';
+import { CommentsDataLoader } from 'src/comments/dataloaders/comments.loader';
 import { CommentModel } from 'src/comments/dto/comment.model';
+import { Loader } from 'src/libs/NestDataloader';
+import { UsersDataLoader } from 'src/users/dataloaders/users.loader';
 import { UserModel } from 'src/users/dto/user.model';
-import { UsersRepository } from 'src/users/users.repository';
 import { FavoritedCommentModel } from '../dto/favorited-comment.model';
 
 @Resolver(() => FavoritedCommentModel)
 export class FavoritedCommentsFieldsResolver {
-  constructor(
-    private readonly commentsRepository: CommentsRepository,
-    private readonly usersRepository: UsersRepository,
-  ) {}
-
   @ResolveField(() => UserModel)
-  user(@Parent() favoritedComment: FavoritedCommentModel) {
-    return this.usersRepository.findOne(favoritedComment.userId);
+  async user(
+    @Parent() { user, userId }: FavoritedCommentModel,
+    @Loader(UsersDataLoader.name)
+    usersDataLoader: ReturnType<UsersDataLoader['generateDataLoader']>,
+  ) {
+    if (user) return user;
+
+    return await usersDataLoader.load(userId);
   }
 
   @ResolveField(() => CommentModel)
-  comment(@Parent() favoritedComment: FavoritedCommentModel) {
-    return this.commentsRepository.findOne(favoritedComment.commentId);
+  async comment(
+    @Parent() { comment, commentId }: FavoritedCommentModel,
+    @Loader(CommentsDataLoader.name)
+    commentsDataLoader: ReturnType<CommentsDataLoader['generateDataLoader']>,
+  ) {
+    if (comment) return comment;
+
+    return await commentsDataLoader.load(commentId);
   }
 }

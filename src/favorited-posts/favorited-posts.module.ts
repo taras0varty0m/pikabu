@@ -5,17 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FavoritedPostsQueriesResolver } from './resolvers/favorited-posts.queries.resolver';
 import { FavoritedPostsMutationsResolver } from './resolvers/favorited-posts.mutations.resolver';
 import { FavoritedPostsFieldsResolver } from './resolvers/favorited-posts.fields.resolver';
-import { UsersRepository } from 'src/users/users.repository';
-import { PostsRepository } from 'src/posts/posts.repository';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      FavoritedPostsRepository,
-      UsersRepository,
-      PostsRepository,
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([FavoritedPostsRepository])],
   providers: [
     FavoritedPostsQueriesResolver,
     FavoritedPostsMutationsResolver,

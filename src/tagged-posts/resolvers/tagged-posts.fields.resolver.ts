@@ -1,24 +1,32 @@
 import { Resolver, Parent, ResolveField } from '@nestjs/graphql';
-import { PostsRepository } from 'src/posts/posts.repository';
 import { PostModel } from 'src/posts/dto/post.model';
 import { UserModel } from 'src/users/dto/user.model';
-import { UsersRepository } from 'src/users/users.repository';
 import { TaggedPostModel } from '../dto/tagged-post.model';
+import { Loader } from 'src/libs/NestDataloader';
+import { UsersDataLoader } from 'src/users/dataloaders/users.loader';
+import { PostsDataLoader } from 'src/posts/dataloaders/posts.loader';
 
 @Resolver(() => TaggedPostModel)
 export class TaggedPostsFieldsResolver {
-  constructor(
-    private readonly postsRepository: PostsRepository,
-    private readonly usersRepository: UsersRepository,
-  ) {}
-
   @ResolveField(() => UserModel)
-  user(@Parent() taggedPost: TaggedPostModel) {
-    return this.usersRepository.findOne(taggedPost.userId);
+  async user(
+    @Parent() { user, userId }: TaggedPostModel,
+    @Loader(UsersDataLoader.name)
+    usersDataLoader: ReturnType<UsersDataLoader['generateDataLoader']>,
+  ) {
+    if (user) return user;
+
+    return await usersDataLoader.load(userId);
   }
 
   @ResolveField(() => PostModel)
-  post(@Parent() taggedPost: TaggedPostModel) {
-    return this.postsRepository.findOne(taggedPost.postId);
+  async post(
+    @Parent() { post, postId }: TaggedPostModel,
+    @Loader(PostsDataLoader.name)
+    postsDataLoader: ReturnType<PostsDataLoader['generateDataLoader']>,
+  ) {
+    if (post) return post;
+
+    return await postsDataLoader.load(postId);
   }
 }

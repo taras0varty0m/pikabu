@@ -1,31 +1,35 @@
 import { Resolver, Parent, ResolveField, Int } from '@nestjs/graphql';
 import { PostModel } from '../dto/post.model';
 import { LikedPostModel } from 'src/liked-posts/dto/liked-post.model';
-import { LikedPostDataLoader } from 'src/liked-posts/dataloaders/liked-posts.loader';
+import { PostsLikedPostDataLoader } from 'src/posts/dataloaders/posts-liked-posts.loader';
 import { Loader } from 'src/libs/NestDataloader';
 import { CommentModel } from 'src/comments/dto/comment.model';
-import { CommentDataLoader } from 'src/comments/dataloaders/comments.loader';
-import { LikedPostsRepository } from 'src/liked-posts/liked-posts.repository';
-import { UsersRepository } from 'src/users/users.repository';
+import { PostsCommentDataLoader } from 'src/posts/dataloaders/posts-comments.loader';
 import { UserModel } from 'src/users/dto/user.model';
+import { PostsDisLikesDataLoader } from '../dataloaders/posts-dislikes.loader';
+import { PostsLikesDataLoader } from '../dataloaders/posts-likes.loader';
+import { UsersDataLoader } from 'src/users/dataloaders/users.loader';
 
 @Resolver(() => PostModel)
 export class PostsFieldsResolver {
-  constructor(
-    private readonly likedPostsRepository: LikedPostsRepository,
-    private readonly usersRepository: UsersRepository,
-  ) {}
-
   @ResolveField(() => UserModel)
-  user(@Parent() post: PostModel) {
-    return this.usersRepository.findOne(post.userId);
+  async user(
+    @Parent() { user, userId }: PostModel,
+    @Loader(UsersDataLoader.name)
+    usersDataLoader: ReturnType<UsersDataLoader['generateDataLoader']>,
+  ) {
+    if (user) return user;
+
+    return await usersDataLoader.load(userId);
   }
 
   @ResolveField(() => [LikedPostModel])
   async likedPosts(
     @Parent() { id, likedPosts }: PostModel,
-    @Loader(LikedPostDataLoader.name)
-    likedPostDataLoader: ReturnType<LikedPostDataLoader['generateDataLoader']>,
+    @Loader(PostsLikedPostDataLoader.name)
+    likedPostDataLoader: ReturnType<
+      PostsLikedPostDataLoader['generateDataLoader']
+    >,
   ) {
     if (likedPosts) return likedPosts;
 
@@ -35,21 +39,37 @@ export class PostsFieldsResolver {
   @ResolveField(() => [CommentModel])
   async comments(
     @Parent() { id, comments }: PostModel,
-    @Loader(CommentDataLoader.name)
-    CommentDataLoader: ReturnType<CommentDataLoader['generateDataLoader']>,
+    @Loader(PostsCommentDataLoader.name)
+    postsCommentDataLoader: ReturnType<
+      PostsCommentDataLoader['generateDataLoader']
+    >,
   ) {
     if (comments) return comments;
 
-    return await CommentDataLoader.load(id);
+    return await postsCommentDataLoader.load(id);
   }
 
   @ResolveField(() => Int)
-  async likes(@Parent() post: PostModel) {
-    return this.likedPostsRepository.getLikesByPostId(post.id);
+  async likes(
+    @Parent() { id, likes }: PostModel,
+    @Loader(PostsLikesDataLoader.name)
+    postLikesDataLoader: ReturnType<PostsLikesDataLoader['generateDataLoader']>,
+  ) {
+    if (likes) return likes;
+
+    return await postLikesDataLoader.load(id);
   }
 
   @ResolveField(() => Int)
-  async disLikes(@Parent() post: PostModel) {
-    return this.likedPostsRepository.getDisLikesByPostId(post.id);
+  async disLikes(
+    @Parent() { id, disLikes }: PostModel,
+    @Loader(PostsDisLikesDataLoader.name)
+    postDisLikesDataLoader: ReturnType<
+      PostsDisLikesDataLoader['generateDataLoader']
+    >,
+  ) {
+    if (disLikes) return disLikes;
+
+    return await postDisLikesDataLoader.load(id);
   }
 }

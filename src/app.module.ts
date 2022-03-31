@@ -16,20 +16,26 @@ import { FavoritedCommentsModule } from './favorited-comments/favorited-comments
 import { FavoritedPostsModule } from './favorited-posts/favorited-posts.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { DataLoaderInterceptor } from './libs/NestDataloader';
-import { FavoritedPostDataLoader } from './favorited-posts/dataloaders/favorited-posts.loader';
+import { UsersFavoritedPostDataLoader } from './users/dataloaders/users-favorited-posts.loader';
 import { FavoritedPostsRepository } from './favorited-posts/favorited-posts.repository';
-import { FavoritedCommentDataLoader } from './favorited-comments/dataloaders/favorited-comments.loader';
+import { UsersFavoritedCommentDataLoader } from './users/dataloaders/users-favorited-comments.loader';
 import { FavoritedCommentsRepository } from './favorited-comments/favorited-comments.repository';
-import { PostDataLoader } from './posts/dataloaders/posts.loader';
+import { PostsDataLoader } from './posts/dataloaders/posts.loader';
 import { PostsRepository } from './posts/posts.repository';
-import { LikedPostDataLoader } from './liked-posts/dataloaders/liked-posts.loader';
+import { PostsLikedPostDataLoader } from './posts/dataloaders/posts-liked-posts.loader';
 import { LikedPostsRepository } from './liked-posts/liked-posts.repository';
 import { LikedCommentsRepository } from './liked-comments/liked-comments.repository';
-import { LikedCommentDataLoader } from './liked-comments/dataloaders/liked-comments.loader';
+import { CommentsLikedCommentDataLoader } from './comments/dataloaders/comments-liked-comments.loader';
 import { CommentsRepository } from './comments/comments.repository';
-import { CommentDataLoader } from './comments/dataloaders/comments.loader';
-import { CommentDisLikesDataLoader } from './comments/dataloaders/comment-dislikes.loader';
-import { CommentLikesDataLoader } from './comments/dataloaders/comment-likes.loader';
+import { PostsCommentDataLoader } from './posts/dataloaders/posts-comments.loader';
+import { CommentsDisLikesDataLoader } from './comments/dataloaders/comments-dislikes.loader';
+import { CommentsLikesDataLoader } from './comments/dataloaders/comments-likes.loader';
+import { PostsDisLikesDataLoader } from './posts/dataloaders/posts-dislikes.loader';
+import { PostsLikesDataLoader } from './posts/dataloaders/posts-likes.loader';
+import { UsersDataLoader } from './users/dataloaders/users.loader';
+import { UsersRepository } from './users/users.repository';
+import { UsersPostDataLoader } from './users/dataloaders/users-posts.loader';
+import { CommentsDataLoader } from './comments/dataloaders/comments.loader';
 
 @Module({
   imports: [
@@ -66,6 +72,7 @@ import { CommentLikesDataLoader } from './comments/dataloaders/comment-likes.loa
       }),
     }),
     TypeOrmModule.forFeature([
+      UsersRepository,
       FavoritedPostsRepository,
       FavoritedCommentsRepository,
       PostsRepository,
@@ -89,36 +96,56 @@ import { CommentLikesDataLoader } from './comments/dataloaders/comment-likes.loa
       useClass: DataLoaderInterceptor,
     },
     {
-      provide: FavoritedPostDataLoader.name,
-      useClass: FavoritedPostDataLoader,
+      provide: UsersFavoritedPostDataLoader.name,
+      useClass: UsersFavoritedPostDataLoader,
     },
     {
-      provide: FavoritedCommentDataLoader.name,
-      useClass: FavoritedCommentDataLoader,
+      provide: UsersFavoritedCommentDataLoader.name,
+      useClass: UsersFavoritedCommentDataLoader,
     },
     {
-      provide: PostDataLoader.name,
-      useClass: PostDataLoader,
+      provide: PostsDataLoader.name,
+      useClass: PostsDataLoader,
     },
     {
-      provide: LikedPostDataLoader.name,
-      useClass: LikedPostDataLoader,
+      provide: PostsLikedPostDataLoader.name,
+      useClass: PostsLikedPostDataLoader,
     },
     {
-      provide: LikedCommentDataLoader.name,
-      useClass: LikedCommentDataLoader,
+      provide: CommentsLikedCommentDataLoader.name,
+      useClass: CommentsLikedCommentDataLoader,
     },
     {
-      provide: CommentDataLoader.name,
-      useClass: CommentDataLoader,
+      provide: PostsCommentDataLoader.name,
+      useClass: PostsCommentDataLoader,
     },
     {
-      provide: CommentDisLikesDataLoader.name,
-      useClass: CommentDisLikesDataLoader,
+      provide: CommentsDisLikesDataLoader.name,
+      useClass: CommentsDisLikesDataLoader,
     },
     {
-      provide: CommentLikesDataLoader.name,
-      useClass: CommentLikesDataLoader,
+      provide: CommentsLikesDataLoader.name,
+      useClass: CommentsLikesDataLoader,
+    },
+    {
+      provide: PostsDisLikesDataLoader.name,
+      useClass: PostsDisLikesDataLoader,
+    },
+    {
+      provide: PostsLikesDataLoader.name,
+      useClass: PostsLikesDataLoader,
+    },
+    {
+      provide: UsersDataLoader.name,
+      useClass: UsersDataLoader,
+    },
+    {
+      provide: UsersPostDataLoader.name,
+      useClass: UsersPostDataLoader,
+    },
+    {
+      provide: CommentsDataLoader.name,
+      useClass: CommentsDataLoader,
     },
   ],
 })

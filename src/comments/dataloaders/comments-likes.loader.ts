@@ -4,7 +4,7 @@ import { NestDataLoader } from 'src/libs/NestDataloader';
 import { CommentsRepository } from '../comments.repository';
 
 @Injectable()
-export class CommentLikesDataLoader
+export class CommentsLikesDataLoader
   implements NestDataLoader<string, number[]>
 {
   constructor(private readonly commentsRepository: CommentsRepository) {}
@@ -15,12 +15,10 @@ export class CommentLikesDataLoader
         commentIds as string[],
       );
 
-      const ids = commentIds.map(
+      return commentIds.map(
         (id) =>
           comments.find((comment) => comment.id === id)?.likedCommentCount || 0,
       );
-
-      return ids;
     });
   }
 }

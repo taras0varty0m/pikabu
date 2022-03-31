@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import { LikedPostsRepository } from 'src/liked-posts/liked-posts.repository';
 import { NestDataLoader } from 'src/libs/NestDataloader';
-import { LikedPostModel } from '../dto/liked-post.model';
+import { LikedPostModel } from '../../liked-posts/dto/liked-post.model';
 
 @Injectable()
-export class LikedPostDataLoader
+export class PostsLikedPostDataLoader
   implements NestDataLoader<string, LikedPostModel[]>
 {
   constructor(private readonly likedPostsRepository: LikedPostsRepository) {}
