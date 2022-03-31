@@ -1,4 +1,5 @@
 import { paginate } from 'nestjs-typeorm-paginate';
+import { TypeLike } from 'src/common/type-like.enum';
 import { Repository } from 'typeorm';
 import { EntityRepository } from 'typeorm/decorator/EntityRepository';
 import { CommentSort } from './dto/comment-sort.enum';
@@ -10,6 +11,30 @@ export class CommentsRepository extends Repository<Comment> {
   async getByPostIds(ids: string[]) {
     return this.createQueryBuilder('comment')
       .where('comment.postId IN (:...ids)', { ids })
+      .getMany();
+  }
+
+  getLikesCount(commentIds: string[]) {
+    return this.createQueryBuilder('comments')
+      .leftJoin('comments.likedComments', 'likedComments')
+      .where('likedComments.type = :vote', { vote: TypeLike.LIKE })
+      .andWhere('likedComments.commentId IN (:...ids)', { ids: commentIds })
+      .loadRelationCountAndMap(
+        'comments.likedCommentCount',
+        'comments.likedComments',
+      )
+      .getMany();
+  }
+
+  getDisLikesCount(commentIds: string[]) {
+    return this.createQueryBuilder('comments')
+      .leftJoin('comments.likedComments', 'likedComments')
+      .where('likedComments.type = :vote', { vote: TypeLike.DISLIKE })
+      .andWhere('likedComments.commentId IN (:...ids)', { ids: commentIds })
+      .loadRelationCountAndMap(
+        'comments.disLikedCommentCount',
+        'comments.likedComments',
+      )
       .getMany();
   }
 

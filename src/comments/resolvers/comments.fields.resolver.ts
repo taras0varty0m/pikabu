@@ -40,20 +40,20 @@ export class CommentsFieldsResolver {
   ) {
     if (likes) return likes;
 
-    return (await commentLikesDataLoader.load(id)).length;
+    return await commentLikesDataLoader.load(id);
   }
 
   @ResolveField(() => Int)
   async disLikes(
-    @Parent() { id, likes }: CommentModel,
+    @Parent() { id, disLikes }: CommentModel,
     @Loader(CommentDisLikesDataLoader.name)
     commentDisLikesDataLoader: ReturnType<
       CommentDisLikesDataLoader['generateDataLoader']
     >,
   ) {
-    if (likes) return likes;
+    if (disLikes) return disLikes;
 
-    return (await commentDisLikesDataLoader.load(id)).length;
+    return await commentDisLikesDataLoader.load(id);
   }
 
   @ResolveField(() => PostModel)
