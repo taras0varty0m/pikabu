@@ -47,30 +47,11 @@ import { CommentsDataLoader } from './comments/dataloaders/comments.loader';
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         API_PORT: Joi.number().required(),
-        CONNECTION: Joi.string().required(),
-        USERNAME: Joi.string().required(),
-        PASSWORD: Joi.string().required(),
-        DATABASE: Joi.string().required(),
-        PORT: Joi.number().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRES_IN: Joi.string().required(),
       }),
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: async (config: ConfigService) => ({
-        type: config.get<'aurora-data-api'>('CONNECTION'),
-        username: config.get<string>('USERNAME'),
-        password: config.get<string>('PASSWORD'),
-        database: config.get<string>('DATABASE'),
-        port: config.get<number>('PORT'),
-        entities: [__dirname + 'dist/**/*.entity{.ts,.js}'],
-        synchronize: true,
-        autoLoadEntities: true,
-        logging: true,
-      }),
-    }),
+    TypeOrmModule.forRoot(),
     TypeOrmModule.forFeature([
       UsersRepository,
       FavoritedPostsRepository,
